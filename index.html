@@ -64,11 +64,12 @@
             font-size: 1.8rem;
             font-weight: 700;
             letter-spacing: 1px;
+            z-index: 1001;
         }
 
         .logo span { color: var(--secondary-color); }
 
-        .nav-links { display: flex; gap: 2rem; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
         .nav-links a {
             color: var(--text-light);
             font-weight: 500;
@@ -89,6 +90,16 @@
             background: var(--text-light); 
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
         }
+
+        .menu-toggle {
+            display: none;
+            color: var(--text-light);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .mobile-btn { display: none; } /* Hidden on desktop */
 
         /* --- Global Section Styles --- */
         section {
@@ -288,12 +299,53 @@
             backdrop-filter: blur(10px);
         }
 
-        /* Responsive */
+        /* ========================================= */
+        /* --- MOBILE RESPONSIVE MEDIA QUERIES ---   */
+        /* ========================================= */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 3.5rem; }
+        }
+
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero h1 { font-size: 3rem; }
+            .menu-toggle { display: block; }
+            .desktop-btn { display: none; }
+            .mobile-btn { display: inline-block; margin-top: 1.5rem; }
+
+            /* Mobile Menu Sidebar */
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 250px;
+                height: 100vh;
+                background: rgba(10, 25, 47, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                transition: 0.4s ease-in-out;
+                border-left: 1px solid var(--glass-border);
+            }
+
+            .nav-links.active { right: 0; }
+            .nav-links li { margin: 1.2rem 0; }
+
+            /* Spacing & Typography Adjustments */
+            section { padding: 4rem 5%; } /* Less padding on mobile */
+            .section-title { font-size: 2.2rem; margin-bottom: 2.5rem; }
+            
+            .hero { padding-top: 6rem; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { font-size: 1.1rem; padding: 0 10px; }
+
+            .services-grid { grid-template-columns: 1fr; } /* Stack services perfectly */
+
             .models-container { flex-direction: column; align-items: center; }
-            .model-card { padding: 2.5rem 1.5rem; }
+            .model-card { padding: 2.5rem 1.5rem; min-width: 100%; }
+
+            /* Footer Mobile Optimization */
+            footer {
+                padding: 1.5rem 5%;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -301,73 +353,67 @@
 
     <div id="canvas-container"></div>
 
-   <nav>
+    <nav>
         <div class="logo">WebNova <span>Tech</span></div>
-        <ul class="nav-links">
+        <div class="menu-toggle" id="mobile-menu"><i class="fa-solid fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links">
             <li><a href="/">Home</a></li>
             <li><a href="/services">Services</a></li>
             <li><a href="/pricing">Pricing</a></li>
+            <li class="mobile-btn"><a href="/contact" class="btn-contact">Get a Quote</a></li>
         </ul>
-        <a href="/contact" class="btn-contact">Get a Quote</a>
+        <a href="/contact" class="btn-contact desktop-btn">Get a Quote</a>
     </nav>
+
     <section class="hero" id="home">
         <h1>Innovating Your <span>Digital Reality</span></h1>
         <p>From complex software architecture to dominant digital marketing, WebNova Technologies delivers scalable, secure tech solutions built for immense growth.</p>
-        <a href="#services" class="btn-main">Explore Our Expertise</a>
+        <a href="/services" class="btn-main">Explore Our Expertise</a>
     </section>
 
     <section id="services">
         <h2 class="section-title">Our Core <span>Capabilities</span></h2>
         <div class="services-grid">
-            
             <div class="service-card">
                 <i class="fa-solid fa-code"></i>
                 <h3>Website Development</h3>
                 <p>High-performance web applications tailored to your brand, ensuring scalability, speed, and seamless user experiences.</p>
             </div>
-            
             <div class="service-card">
                 <i class="fa-brands fa-app-store-ios"></i>
                 <h3>App Development</h3>
                 <p>Native and cross-platform mobile applications engineered for both iOS and Android environments.</p>
             </div>
-
             <div class="service-card">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <h3>E-Commerce Solutions</h3>
                 <p>End-to-end digital storefronts featuring secure gateways, robust cart architecture, and optimized conversion funnels.</p>
             </div>
-            
             <div class="service-card">
                 <i class="fa-solid fa-chart-line"></i>
                 <h3>Digital Marketing</h3>
                 <p>Data-driven marketing strategies, SEO, and targeted ad campaigns designed to maximize your ROI and brand visibility.</p>
             </div>
-
             <div class="service-card">
                 <i class="fa-solid fa-shield-halved"></i>
                 <h3>Cybersecurity & Protection</h3>
                 <p>Advanced security protocols, DDoS mitigation, and vulnerability assessments to keep your digital assets impenetrable.</p>
             </div>
-
             <div class="service-card">
                 <i class="fa-solid fa-microchip"></i>
                 <h3>AI & Data Analytics</h3>
                 <p>Intelligent machine learning integrations and complex data analysis to drive smarter, automated business decisions.</p>
             </div>
-
             <div class="service-card">
                 <i class="fa-solid fa-cloud"></i>
                 <h3>Cloud Architecture</h3>
                 <p>Secure cloud hosting, server configuration, and reliable database management to keep operations running 24/7.</p>
             </div>
-
             <div class="service-card">
                 <i class="fa-solid fa-pen-nib"></i>
                 <h3>UI/UX Design</h3>
                 <p>User-centric interfaces that are visually stunning and intuitively designed to increase engagement and retention.</p>
             </div>
-            
             <div class="service-card">
                 <i class="fa-solid fa-link"></i>
                 <h3>API Integration</h3>
@@ -379,7 +425,6 @@
     <section id="models">
         <h2 class="section-title">Flexible <span>Engagement Models</span></h2>
         <div class="models-container">
-            
             <div class="model-card">
                 <h3>One-Time Build</h3>
                 <p>Perfect for businesses with clear project scopes. Build it once, deploy it, and own it entirely.</p>
@@ -390,7 +435,6 @@
                     <li>Standard 30-day post-launch QA support</li>
                 </ul>
             </div>
-
             <div class="model-card featured">
                 <div class="model-badge">Most Popular Partnership</div>
                 <h3>Annual Retainer</h3>
@@ -403,7 +447,6 @@
                     <li>Cloud hosting and server maintenance included</li>
                 </ul>
             </div>
-
         </div>
     </section>
 
@@ -412,12 +455,37 @@
     </footer>
 
     <script>
+        // --- Mobile Menu Toggle Logic ---
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+        
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenu.querySelector('i');
+            if(navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenu.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
+            });
+        });
+
+        // --- 3D Background Logic ---
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         
         // Setup Camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 4; // Pulled back slightly for better full-screen view
+        camera.position.z = 4; 
 
         // Setup Renderer
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -425,18 +493,16 @@
         renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(renderer.domElement);
 
-        // Particle Geometry (Increased count for larger screen spread)
         const particlesGeometry = new THREE.BufferGeometry();
         const particlesCount = 2500; 
         const posArray = new Float32Array(particlesCount * 3);
 
         for(let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 15; // Increased spread volume
+            posArray[i] = (Math.random() - 0.5) * 15; 
         }
 
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 
-        // Particle Material
         const particlesMaterial = new THREE.PointsMaterial({
             size: 0.015,
             color: 0x00D2FF, 
@@ -448,7 +514,6 @@
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
 
-        // Mouse Interaction Variables
         let mouseX = 0;
         let mouseY = 0;
         let targetX = 0;
@@ -462,7 +527,6 @@
             mouseY = (event.clientY - windowHalfY) * 0.0005;
         });
 
-        // Scroll Interaction - Parallax effect
         let scrollY = window.scrollY;
         window.addEventListener('scroll', () => {
             scrollY = window.scrollY;
@@ -470,23 +534,19 @@
 
         const clock = new THREE.Clock();
 
-        // Animation Loop
         function animate() {
             requestAnimationFrame(animate);
             const elapsedTime = clock.getElapsedTime();
 
-            // Base continuous rotation
             particlesMesh.rotation.y = elapsedTime * 0.05;
             particlesMesh.rotation.x = elapsedTime * 0.02;
 
-            // Smooth mouse follow
             targetX = mouseX * 0.5;
             targetY = mouseY * 0.5;
             
             particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
             particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
 
-            // Parallax effect on scroll
             camera.position.y = -scrollY * 0.001; 
 
             renderer.render(scene, camera);
@@ -494,7 +554,6 @@
 
         animate();
 
-        // Handle Resizing
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
