@@ -1,0 +1,12 @@
+{
+  "name": "webnova-agency",
+  "version": "1.0.0",
+  "description": "3D WebNova Site",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
