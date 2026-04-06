@@ -28,6 +28,9 @@
             background-color: var(--primary-color);
             line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         a { text-decoration: none; }
@@ -131,7 +134,7 @@
         }
 
         /* --- Global Section Styles --- */
-        section { position: relative; z-index: 1; padding: 6rem 5%; }
+        section { position: relative; z-index: 1; padding: 6rem 5%; flex: 1; }
         .section-title { text-align: center; font-size: 2.8rem; margin-bottom: 3.5rem; color: var(--text-light); text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .section-title span { color: var(--secondary-color); }
 
@@ -175,6 +178,7 @@
             z-index: 1;
             border-top: 1px solid var(--glass-border);
             backdrop-filter: blur(10px);
+            margin-top: auto;
         }
 
         /* ========================================= */
@@ -268,6 +272,36 @@
                 <h3>E-Commerce Solutions</h3>
                 <p>End-to-end digital storefronts featuring secure gateways, robust cart architecture, and optimized conversion funnels.</p>
             </div>
+            <div class="service-card">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Digital Marketing</h3>
+                <p>Data-driven marketing strategies, SEO, and targeted ad campaigns designed to maximize your ROI and brand visibility.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>Cybersecurity & Protection</h3>
+                <p>Advanced security protocols, DDoS mitigation, and vulnerability assessments to keep your digital assets impenetrable.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-microchip"></i>
+                <h3>AI & Data Analytics</h3>
+                <p>Intelligent machine learning integrations and complex data analysis to drive smarter, automated business decisions.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-cloud"></i>
+                <h3>Cloud Architecture</h3>
+                <p>Secure cloud hosting, server configuration, and reliable database management to keep operations running 24/7.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-pen-nib"></i>
+                <h3>UI/UX Design</h3>
+                <p>User-centric interfaces that are visually stunning and intuitively designed to increase engagement and retention.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-link"></i>
+                <h3>API Integration</h3>
+                <p>Seamless connection of third-party services, payment gateways, and custom endpoints to expand your system's functionality.</p>
+            </div>
         </div>
     </section>
 
@@ -281,6 +315,7 @@
                     <li>Fixed-cost project delivery</li>
                     <li>Defined timeline and milestones</li>
                     <li>Complete source code handover</li>
+                    <li>Standard 30-day post-launch QA support</li>
                 </ul>
             </div>
             <div class="model-card featured">
@@ -291,6 +326,8 @@
                     <li>Dedicated development hours every month</li>
                     <li>Continuous system updates and feature scaling</li>
                     <li>Priority bug fixes and proactive security patches</li>
+                    <li>Ongoing digital marketing and SEO management</li>
+                    <li>Cloud hosting and server maintenance included</li>
                 </ul>
             </div>
         </div>
