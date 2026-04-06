@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | WebNova Technologies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Shared Base Styles */
+        :root { --primary-color: #0A192F; --secondary-color: #00D2FF; --text-light: #F4F4F9; --glass-bg: rgba(10, 25, 47, 0.6); --glass-border: rgba(0, 210, 255, 0.2); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { color: var(--text-light); background: radial-gradient(circle at center, #112B4E 0%, #0A192F 100%); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        a { text-decoration: none; } ul { list-style: none; }
+
+        /* Navigation */
+        nav { background-color: rgba(10, 25, 47, 0.8); padding: 1.2rem 5%; display: flex; justify-content: space-between; align-items: center; position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); }
+        .logo { color: var(--text-light); font-size: 1.8rem; font-weight: 700; }
+        .logo span { color: var(--secondary-color); }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text-light); font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--secondary-color); }
+        .btn-contact { background: transparent; color: var(--secondary-color); border: 2px solid var(--secondary-color); padding: 0.6rem 1.8rem; border-radius: 5px; font-weight: bold; transition: 0.3s; }
+        .btn-contact:hover { background: var(--secondary-color); color: var(--primary-color); box-shadow: 0 0 15px rgba(0, 210, 255, 0.3); }
+
+        /* Contact Section */
+        .contact-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 8rem 5% 4rem; position: relative; z-index: 2; }
+        .form-wrapper { background: var(--glass-bg); padding: 3rem; border-radius: 15px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px); width: 100%; max-width: 600px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        .form-wrapper h2 { font-size: 2.5rem; margin-bottom: 1rem; text-align: center; color: var(--secondary-color); }
+        .form-wrapper p { text-align: center; color: #A0B3C6; margin-bottom: 2rem; }
+
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-light); font-size: 0.9rem; }
+        .input-group input, .input-group textarea, .input-group select { width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: var(--text-light); border-radius: 5px; outline: none; transition: 0.3s; font-size: 1rem; }
+        .input-group select option { background: var(--primary-color); color: var(--text-light); }
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus { border-color: var(--secondary-color); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2) inset; }
+        .input-group textarea { resize: vertical; min-height: 120px; }
+
+        .btn-submit { width: 100%; background: var(--secondary-color); color: var(--primary-color); border: none; padding: 1rem; font-size: 1.1rem; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
+        .btn-submit:hover { background: var(--text-light); box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+
+        #form-status { margin-top: 1rem; text-align: center; font-weight: bold; display: none; padding: 1rem; border-radius: 5px; }
+        .status-success { background: rgba(0, 210, 255, 0.1); color: var(--secondary-color); border: 1px solid var(--secondary-color); }
+        .status-error { background: rgba(255, 50, 50, 0.1); color: #ff5555; border: 1px solid #ff5555; }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .form-wrapper { padding: 2rem 1.5rem; }
+            .form-wrapper h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">WebNova <span>Tech</span></div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/services">Services</a></li>
+            <li><a href="/pricing">Pricing</a></li>
+        </ul>
+        <a href="/contact" class="btn-contact">Get a Quote</a>
+    </nav>
+
+    <div class="contact-container">
+        <div class="form-wrapper">
+            <h2>Initialize Secure Link</h2>
+            <p>Deploy your project requirements directly to our engineering team.</p>
+            
+            <form id="contactForm">
+                <div class="input-group">
+                    <label for="projectType">Engagement Model</label>
+                    <select id="projectType" name="projectType" required>
+                        <option value="" disabled selected>Select required architecture...</option>
+                        <option value="One-Time Build">One-Time Build</option>
+                        <option value="Annual Retainer">Annual Retainer</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="name">System Name / Designation</label>
+                    <input type="text" id="name" name="name" required placeholder="Your Name or Company">
+                </div>
+                <div class="input-group">
+                    <label for="email">Encrypted Return Address (Email)</label>
+                    <input type="email" id="email" name="email" required placeholder="contact@domain.com">
+                </div>
+                <div class="input-group">
+                    <label for="message">Transmission Payload (Project Details)</label>
+                    <textarea id="message" name="message" required placeholder="Detail your required architecture..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Transmit Data <i class="fa-solid fa-paper-plane"></i></button>
+                <div id="form-status"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); 
+            
+            const statusDiv = document.getElementById('form-status');
+            const submitBtn = document.querySelector('.btn-submit');
+            
+            submitBtn.innerHTML = 'Transmitting... <i class="fa-solid fa-spinner fa-spin"></i>';
+            statusDiv.style.display = 'none';
+
+            const formData = {
+                projectType: document.getElementById('projectType').value,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                message: document.getElementById('message').value
+            };
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+
+                statusDiv.style.display = 'block';
+                if(response.ok) {
+                    statusDiv.className = 'status-success';
+                    statusDiv.innerText = result.message;
+                    document.getElementById('contactForm').reset();
+                } else {
+                    statusDiv.className = 'status-error';
+                    statusDiv.innerText = result.message;
+                }
+            } catch (error) {
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'status-error';
+                statusDiv.innerText = 'Network failure. Could not reach servers.';
+            }
+
+            submitBtn.innerHTML = 'Transmit Data <i class="fa-solid fa-paper-plane"></i>';
+        });
+    </script>
+</body>
+</html>
