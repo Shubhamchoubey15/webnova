@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebNova Technologies | Empowering Your Digital Future</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* --- Base & Reset --- */
+        :root {
+            --primary-color: #0A192F; 
+            --secondary-color: #00D2FF; 
+            --text-light: #F4F4F9;
+            --glass-bg: rgba(10, 25, 47, 0.4);
+            --glass-border: rgba(0, 210, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            color: var(--text-light);
+            background-color: var(--primary-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; }
+        ul { list-style: none; }
+
+        /* --- 3D Canvas Background --- */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Keeps it behind all content */
+            background: radial-gradient(circle at center, #112B4E 0%, #0A192F 100%);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            background-color: rgba(10, 25, 47, 0.7);
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            color: var(--text-light);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span { color: var(--secondary-color); }
+
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a {
+            color: var(--text-light);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--secondary-color); }
+
+        .btn-contact {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 0.6rem 1.8rem;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+        }
+        .btn-contact:hover { 
+            background: var(--text-light); 
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- Global Section Styles --- */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 3.5rem;
+            color: var(--text-light);
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .section-title span { color: var(--secondary-color); }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 8rem;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            line-height: 1.1;
+        }
+
+        .hero h1 span { color: var(--secondary-color); }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #A0B3C6;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .hero .btn-main {
+            display: inline-block;
+            background: transparent;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .hero .btn-main:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+        }
+
+        /* --- Services Section --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.4s, box-shadow 0.4s;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 210, 255, 0.2) inset;
+            border-color: var(--secondary-color);
+        }
+
+        .service-card i {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .service-card p {
+            color: #A0B3C6;
+            font-size: 0.95rem;
+        }
+
+        /* --- Engagement Models Section --- */
+        .models-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .model-card {
+            background: var(--glass-bg);
+            padding: 3.5rem 3rem;
+            border-radius: 15px;
+            flex: 1;
+            min-width: 320px;
+            max-width: 500px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.3s;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .model-card.featured {
+            border: 2px solid var(--secondary-color);
+            position: relative;
+            background: rgba(17, 43, 78, 0.6);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0, 210, 255, 0.1) inset;
+        }
+
+        .model-badge {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1.5rem;
+            position: absolute;
+            top: -18px;
+            right: 50%;
+            transform: translateX(50%);
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.4);
+            white-space: nowrap;
+        }
+
+        .model-card h3 {
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .model-card > p {
+            text-align: center;
+            color: #A0B3C6;
+            margin-bottom: 2rem;
+        }
+
+        .model-card ul {
+            text-align: left;
+        }
+
+        .model-card ul li {
+            margin-bottom: 1.2rem;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-light);
+        }
+
+        .model-card ul li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--secondary-color);
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: rgba(6, 16, 30, 0.9);
+            color: #A0B3C6;
+            text-align: center;
+            padding: 2rem 5%;
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 3rem; }
+            .models-container { flex-direction: column; align-items: center; }
+            .model-card { padding: 2.5rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <nav>
+        <div class="logo">WebNova <span>Tech</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#models">Pricing</a></li>
+        </ul>
+        <a href="#contact" class="btn-contact">Get a Quote</a>
+    </nav>
+
+    <section class="hero" id="home">
+        <h1>Innovating Your <span>Digital Reality</span></h1>
+        <p>From complex software architecture to dominant digital marketing, WebNova Technologies delivers scalable, secure tech solutions built for immense growth.</p>
+        <a href="#services" class="btn-main">Explore Our Expertise</a>
+    </section>
+
+    <section id="services">
+        <h2 class="section-title">Our Core <span>Capabilities</span></h2>
+        <div class="services-grid">
+            
+            <div class="service-card">
+                <i class="fa-solid fa-code"></i>
+                <h3>Website Development</h3>
+                <p>High-performance web applications tailored to your brand, ensuring scalability, speed, and seamless user experiences.</p>
+            </div>
+            
+            <div class="service-card">
+                <i class="fa-brands fa-app-store-ios"></i>
+                <h3>App Development</h3>
+                <p>Native and cross-platform mobile applications engineered for both iOS and Android environments.</p>
+            </div>
+
+            <div class="service-card">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h3>E-Commerce Solutions</h3>
+                <p>End-to-end digital storefronts featuring secure gateways, robust cart architecture, and optimized conversion funnels.</p>
+            </div>
+            
+            <div class="service-card">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Digital Marketing</h3>
+                <p>Data-driven marketing strategies, SEO, and targeted ad campaigns designed to maximize your ROI and brand visibility.</p>
+            </div>
+
+            <div class="service-card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>Cybersecurity & Protection</h3>
+                <p>Advanced security protocols, DDoS mitigation, and vulnerability assessments to keep your digital assets impenetrable.</p>
+            </div>
+
+            <div class="service-card">
+                <i class="fa-solid fa-microchip"></i>
+                <h3>AI & Data Analytics</h3>
+                <p>Intelligent machine learning integrations and complex data analysis to drive smarter, automated business decisions.</p>
+            </div>
+
+            <div class="service-card">
+                <i class="fa-solid fa-cloud"></i>
+                <h3>Cloud Architecture</h3>
+                <p>Secure cloud hosting, server configuration, and reliable database management to keep operations running 24/7.</p>
+            </div>
+
+            <div class="service-card">
+                <i class="fa-solid fa-pen-nib"></i>
+                <h3>UI/UX Design</h3>
+                <p>User-centric interfaces that are visually stunning and intuitively designed to increase engagement and retention.</p>
+            </div>
+            
+            <div class="service-card">
+                <i class="fa-solid fa-link"></i>
+                <h3>API Integration</h3>
+                <p>Seamless connection of third-party services, payment gateways, and custom endpoints to expand your system's functionality.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="models">
+        <h2 class="section-title">Flexible <span>Engagement Models</span></h2>
+        <div class="models-container">
+            
+            <div class="model-card">
+                <h3>One-Time Build</h3>
+                <p>Perfect for businesses with clear project scopes. Build it once, deploy it, and own it entirely.</p>
+                <ul>
+                    <li>Fixed-cost project delivery</li>
+                    <li>Defined timeline and milestones</li>
+                    <li>Complete source code handover</li>
+                    <li>Standard 30-day post-launch QA support</li>
+                </ul>
+            </div>
+
+            <div class="model-card featured">
+                <div class="model-badge">Most Popular Partnership</div>
+                <h3>Annual Retainer</h3>
+                <p>A continuous partnership for businesses that require ongoing development, security, and dedicated technical growth.</p>
+                <ul>
+                    <li>Dedicated development hours every month</li>
+                    <li>Continuous system updates and feature scaling</li>
+                    <li>Priority bug fixes and proactive security patches</li>
+                    <li>Ongoing digital marketing and SEO management</li>
+                    <li>Cloud hosting and server maintenance included</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <footer id="contact">
+        <p>&copy; 2026 WebNova Technologies. All rights reserved. | Engineering the Future.</p>
+    </footer>
+
+    <script>
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        
+        // Setup Camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 4; // Pulled back slightly for better full-screen view
+
+        // Setup Renderer
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // Particle Geometry (Increased count for larger screen spread)
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 2500; 
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 15; // Increased spread volume
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        // Particle Material
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.015,
+            color: 0x00D2FF, 
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Mouse Interaction Variables
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX) * 0.0005;
+            mouseY = (event.clientY - windowHalfY) * 0.0005;
+        });
+
+        // Scroll Interaction - Parallax effect
+        let scrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+        });
+
+        const clock = new THREE.Clock();
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            // Base continuous rotation
+            particlesMesh.rotation.y = elapsedTime * 0.05;
+            particlesMesh.rotation.x = elapsedTime * 0.02;
+
+            // Smooth mouse follow
+            targetX = mouseX * 0.5;
+            targetY = mouseY * 0.5;
+            
+            particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
+            particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
+
+            // Parallax effect on scroll
+            camera.position.y = -scrollY * 0.001; 
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle Resizing
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
