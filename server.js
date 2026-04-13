@@ -3,20 +3,17 @@ const express = require('express');
 const mysql = require('mysql2/promise');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const request = require('request'); // Added for Authkey.io
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware to parse form data securely
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Serve static HTML/CSS/JS files
 app.use(express.static(__dirname));
 
-// Create a MariaDB/MySQL Connection Pool using your Hostinger .env variables
 const pool = mysql.createPool({
-    host: process.env.DB_HOST, // Make sure this is 127.0.0.1 in your .env if localhost fails
+    host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
@@ -25,24 +22,19 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// Test the database connection on startup
 pool.getConnection()
-    .then(conn => {
-        console.log('Securely connected to MariaDB Database');
-        conn.release(); // Release connection back to the pool
-    })
+    .then(conn => { console.log('Securely connected to MariaDB Database'); conn.release(); })
     .catch(err => console.error('Database connection error:', err.message));
 
-// Configure Nodemailer Transporter using Hostinger SMTP
 const transporter = nodemailer.createTransport({
     host: 'smtp.hostinger.com',
     port: 465,
     secure: true, 
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
+    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
 });
+
+// --- IN-MEMORY OTP STORE (For demonstration/session) ---
+const otpStore = {};
 
 // --- MULTI-PAGE ROUTES ---
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
@@ -50,39 +42,77 @@ app.get('/services', (req, res) => res.sendFile(path.join(__dirname, 'services.h
 app.get('/pricing', (req, res) => res.sendFile(path.join(__dirname, 'pricing.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'contact.html')));
 
+// --- NEW ROUTE: SEND OTP VIA AUTHKEY.IO ---
+app.post('/api/send-otp', (req, res) => {
+    const { mobile, country_code } = req.body;
+    
+    if (!mobile) return res.status(400).json({ success: false, message: 'Mobile number required.' });
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    otpStore[mobile] = otp; // Store temporarily
+    
+    // Authkey.io integration
+    const options = {
+        method: 'GET',
+        url: 'https://console.authkey.io/request',
+        qs: {
+            authkey: process.env.AUTHKEY_API,
+            sms: `Your WebNova secure verification code is: ${otp}`,
+            mobile: mobile,
+            country_code: country_code || '91',
+            sender: process.env.AUTHKEY_SENDER || 'WEBNOV'
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if (error) {
+            console.error('OTP Send Error:', error);
+            return res.status(500).json({ success: false, message: 'Failed to dispatch OTP.' });
+        }
+        console.log('Authkey Response:', body);
+        res.status(200).json({ success: true, message: 'OTP Dispatched Successfully.' });
+    });
+});
+
 // --- SECURE FORM SUBMISSION & EMAIL API ---
 app.post('/api/contact', async (req, res) => {
     try {
-        const { projectType, name, email, message } = req.body;
+        const { projectType, name, email, mobile, otp, message } = req.body;
 
-        // Basic validation
-        if (!projectType || !name || !email || !message) {
-            return res.status(400).json({ success: false, message: 'All fields are required.' });
+        if (!projectType || !name || !email || !mobile || !otp) {
+            return res.status(400).json({ success: false, message: 'All fields and OTP are required.' });
         }
 
-        // 1. Generate 6-digit Reference Number (IST Timezone)
+        // 1. Verify OTP
+        if (otpStore[mobile] !== otp) {
+            return res.status(400).json({ success: false, message: 'Invalid or Expired OTP.' });
+        }
+        delete otpStore[mobile]; // Clear OTP after successful use
+
+        // 2. Generate 6-digit Reference Number
         const istFormatter = new Intl.DateTimeFormat('en-GB', { 
             timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
         });
-        // Converts current time like 14:30:45 to 143045
         const timeString = istFormatter.format(new Date()).replace(/:/g, ''); 
-        
-        const prefix = projectType === 'One-Time Build' ? 'OTB' : 'AR';
-        const finalReference = `${prefix}-${timeString}`;
+        const finalReference = `PLAN-${timeString}`;
 
-        // 2. Insert into MariaDB Database (using Prepared Statements for security)
+        // Append Mobile to the message so it fits in your existing DB schema
+        const detailedMessage = `Verified Mobile: ${mobile}\n\nClient Notes:\n${message || 'Standard Plan Selection'}`;
+
+        // 3. Insert into MariaDB
         const sqlQuery = 'INSERT INTO contacts (reference_number, project_type, name, email, message) VALUES (?, ?, ?, ?, ?)';
-        await pool.execute(sqlQuery, [finalReference, projectType, name, email, message]);
+        await pool.execute(sqlQuery, [finalReference, projectType, name, email, detailedMessage]);
 
-        // 3. Construct Admin Notification Email (Sent to you)
+        // 4. Admin Email
         const adminMailOptions = {
             from: `"WebNova System" <${process.env.EMAIL_USER}>`,
             to: process.env.ADMIN_EMAIL,
-            subject: `New Secure Lead: ${projectType} [${finalReference}]`,
-            text: `WEBNOVA TECHNOLOGIES - NEW LEAD\n\nReference: ${finalReference}\nType: ${projectType}\nName: ${name}\nEmail: ${email}\n\nTransmission Payload:\n${message}`
+            subject: `New Secure Lead (Verified): ${projectType} [${finalReference}]`,
+            text: `WEBNOVA TECHNOLOGIES - NEW LEAD\n\nReference: ${finalReference}\nType: ${projectType}\nName: ${name}\nEmail: ${email}\nMobile: ${mobile} (OTP VERIFIED)\n\nPayload:\n${message}`
         };
 
-        // 4. Construct Client Confirmation Email (HTML Formatted, sent to client)
+        // 5. Client Email
         const clientMailOptions = {
             from: `"WebNova Technologies" <${process.env.EMAIL_USER}>`,
             to: email,
@@ -91,32 +121,22 @@ app.post('/api/contact', async (req, res) => {
                 <div style="font-family: Arial, sans-serif; color: #0A192F; padding: 20px;">
                     <h2 style="color: #00D2FF;">WebNova Technologies</h2>
                     <p>Hello <strong>${name}</strong>,</p>
-                    <p>Your request for a <strong>${projectType}</strong> has been securely logged in our system.</p>
+                    <p>Your request for the <strong>${projectType}</strong> has been securely logged and your mobile number has been verified.</p>
                     <p>Your official tracking reference is: <strong>${finalReference}</strong></p>
-                    <p>Our engineering team will review your transmission payload and initialize contact shortly.</p>
-                    <hr style="border: 1px solid #eee; margin: 20px 0;">
-                    <p style="font-size: 12px; color: #888;">This is an automated system message. Do not reply directly to this email.</p>
+                    <p>Our engineering team will initialize contact shortly.</p>
                 </div>
             `
         };
 
-        // 5. Send Both Emails
         await transporter.sendMail(adminMailOptions);
         await transporter.sendMail(clientMailOptions);
 
-        // 6. Send Success Response to Frontend
-        res.status(200).json({ 
-            success: true, 
-            message: `Transmission received. Secure reference number: ${finalReference}. Confirmation email dispatched.` 
-        });
+        res.status(200).json({ success: true, message: `Transmission received. Secure reference: ${finalReference}.` });
         
     } catch (error) {
         console.error('System Error:', error);
-        res.status(500).json({ success: false, message: 'System error during processing. Please try again later.' });
+        res.status(500).json({ success: false, message: 'System error during processing.' });
     }
 });
 
-// Start Server
-app.listen(port, () => {
-    console.log(`WebNova Central Core active on port ${port}`);
-});
+app.listen(port, () => console.log(`WebNova Central Core active on port ${port}`));
