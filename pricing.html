@@ -39,7 +39,6 @@
         .close-btn:hover { color: #ff5555; }
         .modal-content h2 { text-align: center; color: var(--secondary-color); margin-bottom: 1.5rem; font-size: 1.8rem; }
         
-        /* Standardized Input Groups for all pages */
         .input-group { margin-bottom: 1.2rem; }
         .input-group label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; color: #A0B3C6; }
         .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); color: white; border-radius: 5px; outline: none; font-size: 1rem; }
@@ -77,9 +76,88 @@
     </header>
 
     <section class="pricing-grid">
-        <div class="price-card" onclick="openModal('Website Development')"><i class="fa-solid fa-code"></i><h3>Website Development</h3><p class="promo-price">Starting at RS 4,999</p><p class="desc">High-performance web applications tailored to your brand.</p><button class="btn-select">Secure Quote</button></div>
-        <div class="price-card" onclick="openModal('App Development')"><i class="fa-brands fa-app-store-ios"></i><h3>App Development</h3><p class="promo-price">Starting at RS 14,999</p><p class="desc">Native and cross-platform mobile applications.</p><button class="btn-select">Secure Quote</button></div>
-        <div class="price-card" onclick="openModal('E-Commerce Solutions')"><i class="fa-solid fa-cart-shopping"></i><h3>E-Commerce</h3><p class="promo-price">Starting at RS 9,999</p><p class="desc">End-to-end digital storefronts featuring secure gateways.</p><button class="btn-select">Secure Quote</button></div>
+        
+        <div class="price-card" onclick="openModal('Website Development')">
+            <i class="fa-solid fa-code"></i>
+            <h3>Website Development</h3>
+            <p class="promo-price">Starting at RS 4,999</p>
+            <p class="desc">High-performance web applications tailored to your brand, ensuring scalability, speed, and seamless user experiences.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('App Development')">
+            <i class="fa-brands fa-app-store-ios"></i>
+            <h3>App Development</h3>
+            <p class="promo-price">Starting at RS 14,999</p>
+            <p class="desc">Native and cross-platform mobile applications engineered for both iOS and Android environments.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('E-Commerce Solutions')">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <h3>E-Commerce Solutions</h3>
+            <p class="promo-price">Starting at RS 9,999</p>
+            <p class="desc">End-to-end digital storefronts featuring secure gateways, robust cart architecture, and optimized conversion funnels.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('Digital Marketing')">
+            <i class="fa-solid fa-chart-line"></i>
+            <h3>Digital Marketing</h3>
+            <p class="promo-price">Starting at RS 2,999/mo</p>
+            <p class="desc">Data-driven marketing strategies, SEO, and targeted ad campaigns designed to maximize your ROI and brand visibility.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('Cybersecurity & Protection')">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>Cybersecurity</h3>
+            <p class="promo-price">Starting at RS 7,999</p>
+            <p class="desc">Advanced security protocols, DDoS mitigation, and vulnerability assessments to keep your digital assets impenetrable.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('AI & Data Analytics')">
+            <i class="fa-solid fa-microchip"></i>
+            <h3>AI & Data Analytics</h3>
+            <p class="promo-price">Starting at RS 12,999</p>
+            <p class="desc">Intelligent machine learning integrations and complex data analysis to drive smarter, automated business decisions.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('Cloud Architecture')">
+            <i class="fa-solid fa-cloud"></i>
+            <h3>Cloud Architecture</h3>
+            <p class="promo-price">Starting at RS 3,999/mo</p>
+            <p class="desc">Secure cloud hosting, server configuration, and reliable database management to keep operations running 24/7.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('UI/UX Design')">
+            <i class="fa-solid fa-pen-nib"></i>
+            <h3>UI/UX Design</h3>
+            <p class="promo-price">Starting at RS 5,999</p>
+            <p class="desc">User-centric interfaces that are visually stunning and intuitively designed to increase engagement and retention.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('API Integration')">
+            <i class="fa-solid fa-link"></i>
+            <h3>API Integration</h3>
+            <p class="promo-price">Starting at RS 1,999</p>
+            <p class="desc">Seamless connection of third-party services, payment gateways, and custom endpoints to expand your system's functionality.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
     </section>
 
     <div id="quoteModal" class="modal">
