@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricing | WebNova Technologies</title>
+    <title>Pricing Plans | WebNova Technologies</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary-color: #0A192F; --secondary-color: #00D2FF; --text-light: #F4F4F9; --glass-bg: rgba(10, 25, 47, 0.6); --glass-border: rgba(0, 210, 255, 0.2); }
@@ -14,43 +14,45 @@
         nav { background-color: rgba(10, 25, 47, 0.8); padding: 1.2rem 5%; display: flex; justify-content: space-between; align-items: center; position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); }
         .logo { color: var(--text-light); font-size: 1.8rem; font-weight: 700; } .logo span { color: var(--secondary-color); }
         .nav-links { display: flex; gap: 2rem; } .nav-links a { color: var(--text-light); font-weight: 500; transition: 0.3s; } .nav-links a:hover { color: var(--secondary-color); }
-        .btn-contact { background: transparent; color: var(--secondary-color); border: 2px solid var(--secondary-color); padding: 0.6rem 1.8rem; border-radius: 5px; font-weight: bold; transition: 0.3s; }
-        .btn-contact:hover { background: var(--secondary-color); color: var(--primary-color); box-shadow: 0 0 15px rgba(0, 210, 255, 0.3); }
 
-        .page-header { padding: 10rem 5% 4rem; text-align: center; }
+        .page-header { padding: 8rem 5% 2rem; text-align: center; }
         .page-header h1 { font-size: 3.5rem; color: var(--secondary-color); text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .page-header p { font-size: 1.2rem; color: #A0B3C6; max-width: 700px; margin: 1rem auto; }
 
         .pricing-grid { padding: 2rem 5% 6rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
-        .price-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 3rem; border-radius: 15px; width: 100%; max-width: 400px; backdrop-filter: blur(10px); transition: 0.4s; position: relative; }
-        .price-card:hover { transform: translateY(-5px); }
-        .price-card.featured { border: 2px solid var(--secondary-color); background: rgba(17, 43, 78, 0.6); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        .badge { position: absolute; top: -15px; right: 50%; transform: translateX(50%); background: var(--secondary-color); color: var(--primary-color); padding: 5px 15px; border-radius: 20px; font-weight: bold; white-space: nowrap; }
-        .price-card h3 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--text-light); }
-        .price-card h4 { font-size: 1.5rem; color: var(--secondary-color); margin-bottom: 2rem; }
-        .price-card ul { margin-bottom: 2rem; }
-        .price-card ul li { margin-bottom: 1rem; padding-left: 2rem; position: relative; color: #A0B3C6; }
+        .price-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 3rem; border-radius: 15px; width: 100%; max-width: 350px; backdrop-filter: blur(10px); transition: 0.4s; position: relative; text-align: center; cursor: pointer; }
+        .price-card:hover { transform: translateY(-10px); border-color: var(--secondary-color); box-shadow: 0 10px 40px rgba(0, 210, 255, 0.2); }
+        .price-card h3 { font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--text-light); }
+        .price-card p { color: #A0B3C6; font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .price-card ul { margin-bottom: 2rem; text-align: left; }
+        .price-card ul li { margin-bottom: 1rem; padding-left: 2rem; position: relative; color: #A0B3C6; font-size: 0.95rem; }
         .price-card ul li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--secondary-color); position: absolute; left: 0; }
+        
+        .btn-select { background: transparent; border: 2px solid var(--secondary-color); color: var(--secondary-color); padding: 0.8rem 2rem; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .price-card:hover .btn-select { background: var(--secondary-color); color: var(--primary-color); }
 
-        .quick-form-section { background: rgba(0,0,0,0.3); padding: 5rem 5%; border-top: 1px solid var(--glass-border); }
-        .form-wrapper { max-width: 600px; margin: 0 auto; background: var(--glass-bg); padding: 3rem; border-radius: 15px; border: 1px solid var(--glass-border); }
-        .form-wrapper h2 { text-align: center; color: var(--secondary-color); margin-bottom: 2rem; }
-        .input-group { margin-bottom: 1.5rem; }
-        .input-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; }
-        .input-group input, .input-group select { width: 100%; padding: 1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); color: white; border-radius: 5px; outline: none; }
-        .input-group select option { background: var(--primary-color); }
-        .input-group input:focus, .input-group select:focus { border-color: var(--secondary-color); }
-        .btn-submit { width: 100%; background: var(--secondary-color); color: var(--primary-color); border: none; padding: 1rem; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; font-size: 1.1rem;}
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
+        .modal-content { background: var(--primary-color); padding: 3rem; border-radius: 15px; border: 1px solid var(--secondary-color); width: 90%; max-width: 500px; position: relative; box-shadow: 0 0 30px rgba(0, 210, 255, 0.3); animation: slideIn 0.4s ease; }
+        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .close-btn { position: absolute; top: 15px; right: 20px; color: white; font-size: 2rem; cursor: pointer; transition: 0.3s; }
+        .close-btn:hover { color: #ff5555; }
+        
+        .modal-content h2 { text-align: center; color: var(--secondary-color); margin-bottom: 1.5rem; font-size: 1.8rem; }
+        .input-group { margin-bottom: 1.2rem; }
+        .input-group label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; color: #A0B3C6; }
+        .input-group input { width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); color: white; border-radius: 5px; outline: none; }
+        .input-group input:focus { border-color: var(--secondary-color); }
+        
+        .otp-container { display: flex; gap: 10px; }
+        #btnSendOtp { background: var(--secondary-color); color: var(--primary-color); border: none; padding: 0 1.5rem; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; white-space: nowrap; }
+        #btnSendOtp:hover { background: white; }
+        .btn-submit { width: 100%; background: var(--secondary-color); color: var(--primary-color); border: none; padding: 1rem; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; margin-top: 1rem; display: none; }
         .btn-submit:hover { box-shadow: 0 0 20px rgba(0, 210, 255, 0.4); background: white; }
-        #form-status { margin-top: 1rem; text-align: center; padding: 1rem; display: none; border-radius: 5px; }
+        
+        #form-status, #otp-status { margin-top: 1rem; text-align: center; padding: 0.8rem; display: none; border-radius: 5px; font-size: 0.9rem; }
 
-        footer { background: rgba(6, 16, 30, 0.9); color: #A0B3C6; text-align: center; padding: 2rem 5%; border-top: 1px solid var(--glass-border); }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .page-header h1 { font-size: 2.5rem; }
-            .form-wrapper { padding: 2rem 1.5rem; }
-        }
+        footer { background: rgba(6, 16, 30, 0.9); color: #A0B3C6; text-align: center; padding: 2rem 5%; border-top: 1px solid var(--glass-border); margin-top: auto; }
     </style>
 </head>
 <body>
@@ -62,82 +64,171 @@
             <li><a href="/services">Services</a></li>
             <li><a href="/pricing">Pricing</a></li>
         </ul>
-        <a href="/contact" class="btn-contact">Secure a Quote</a>
     </nav>
 
     <header class="page-header">
-        <h1>Engagement Models</h1>
-        <p>Transparent, scalable partnerships to match your technical requirements.</p>
+        <h1>Select Your Architecture</h1>
+        <p>Capabilities bundled to match your specific enterprise growth phase.</p>
     </header>
 
     <section class="pricing-grid">
-        <div class="price-card">
-            <h3>One-Time Build</h3>
-            <h4>Custom Quote</h4>
+        <div class="price-card" onclick="openModal('Digital Presence Plan')">
+            <h3>Digital Presence</h3>
+            <p>Establish your foundation.</p>
             <ul>
-                <li>Fixed-cost project delivery</li>
-                <li>Defined timeline & milestones</li>
-                <li>Complete source code handover</li>
-                <li>Standard 30-day post-launch QA</li>
+                <li>Website Development</li>
+                <li>UI/UX Design</li>
+                <li>Cloud Architecture Setup</li>
             </ul>
+            <button class="btn-select">Select Plan</button>
         </div>
-        <div class="price-card featured">
-            <div class="badge">Most Popular</div>
-            <h3>Annual Retainer</h3>
-            <h4>Scalable Contract</h4>
+
+        <div class="price-card" onclick="openModal('Growth & Scale Plan')">
+            <h3>Growth & Scale</h3>
+            <p>Expand your operational reach.</p>
             <ul>
-                <li>Dedicated monthly development hours</li>
-                <li>Continuous system updates</li>
-                <li>Proactive security patches</li>
-                <li>Cloud hosting & server maintenance</li>
+                <li>E-Commerce Solutions</li>
+                <li>App Development (iOS/Android)</li>
+                <li>Data-Driven Digital Marketing</li>
             </ul>
+            <button class="btn-select">Select Plan</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('Enterprise Security Plan')">
+            <h3>Enterprise Matrix</h3>
+            <p>Secure and automate systems.</p>
+            <ul>
+                <li>Cybersecurity & Protection</li>
+                <li>AI & Data Analytics</li>
+                <li>Custom API Integration</li>
+            </ul>
+            <button class="btn-select">Select Plan</button>
         </div>
     </section>
 
-    <section class="quick-form-section">
-        <div class="form-wrapper">
-            <h2>Select Your Model</h2>
+    <div id="quoteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Initialize Plan</h2>
             <form id="pricingForm">
-                <input type="hidden" id="message" value="Automated Lead from Pricing Page - Requesting contract initiation.">
+                <input type="hidden" id="selectedPlan" name="selectedPlan">
+                
                 <div class="input-group">
-                    <label>Engagement Model</label>
-                    <select id="projectType" required>
-                        <option value="" disabled selected>Select an option...</option>
-                        <option value="One-Time Build">One-Time Build</option>
-                        <option value="Annual Retainer">Annual Retainer</option>
-                    </select>
+                    <label>System Name / Company</label>
+                    <input type="text" id="name" required placeholder="Your Name">
                 </div>
-                <div class="input-group">
-                    <label>System Name / Designation</label>
-                    <input type="text" id="name" required placeholder="Your Name or Company">
-                </div>
+                
                 <div class="input-group">
                     <label>Encrypted Return Address</label>
                     <input type="email" id="email" required placeholder="contact@domain.com">
                 </div>
-                <button type="submit" class="btn-submit">Initialize Contract <i class="fa-solid fa-file-signature"></i></button>
+
+                <div class="input-group">
+                    <label>Mobile Number (For Verification)</label>
+                    <div class="otp-container">
+                        <input type="tel" id="mobile" required placeholder="9876543210">
+                        <button type="button" id="btnSendOtp">Get OTP</button>
+                    </div>
+                    <div id="otp-status"></div>
+                </div>
+
+                <div class="input-group" id="otpGroup" style="display: none;">
+                    <label>Secure Authentication Code (OTP)</label>
+                    <input type="text" id="otp" placeholder="Enter 6-digit OTP">
+                </div>
+
+                <button type="submit" id="btnFinalSubmit" class="btn-submit">Verify & Initialize Contract</button>
                 <div id="form-status"></div>
             </form>
         </div>
-    </section>
+    </div>
 
     <footer>
         <p>&copy; 2026 WebNova Technologies. All operations secured.</p>
     </footer>
 
     <script>
+        const modal = document. document.getElementById('quoteModal');
+        
+        function openModal(planName) {
+            document.getElementById('selectedPlan').value = planName;
+            document.getElementById('modalTitle').innerText = 'Initialize ' + planName;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.getElementById('pricingForm').reset();
+            document.getElementById('otpGroup').style.display = 'none';
+            document.getElementById('btnFinalSubmit').style.display = 'none';
+            document.getElementById('form-status').style.display = 'none';
+            document.getElementById('otp-status').style.display = 'none';
+        }
+
+        // Send OTP Logic
+        document.getElementById('btnSendOtp').addEventListener('click', async () => {
+            const mobile = document.getElementById('mobile').value;
+            const otpStatus = document.getElementById('otp-status');
+            const btnSendOtp = document.getElementById('btnSendOtp');
+
+            if (!mobile || mobile.length < 10) {
+                otpStatus.style.display = 'block';
+                otpStatus.style.color = '#ff5555';
+                otpStatus.innerText = 'Please enter a valid mobile number.';
+                return;
+            }
+
+            btnSendOtp.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            btnSendOtp.disabled = true;
+
+            try {
+                const response = await fetch('/api/send-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mobile: mobile, country_code: '91' })
+                });
+                
+                const result = await response.json();
+                otpStatus.style.display = 'block';
+                
+                if (response.ok) {
+                    otpStatus.style.color = '#00D2FF';
+                    otpStatus.innerText = result.message;
+                    // Reveal OTP Field and Final Submit button
+                    document.getElementById('otpGroup').style.display = 'block';
+                    document.getElementById('btnFinalSubmit').style.display = 'block';
+                    btnSendOtp.innerText = 'Sent!';
+                } else {
+                    otpStatus.style.color = '#ff5555';
+                    otpStatus.innerText = result.message;
+                    btnSendOtp.innerText = 'Get OTP';
+                    btnSendOtp.disabled = false;
+                }
+            } catch (error) {
+                otpStatus.style.display = 'block';
+                otpStatus.style.color = '#ff5555';
+                otpStatus.innerText = 'Network error. Try again.';
+                btnSendOtp.innerText = 'Get OTP';
+                btnSendOtp.disabled = false;
+            }
+        });
+
+        // Final Form Submission
         document.getElementById('pricingForm').addEventListener('submit', async function(e) {
             e.preventDefault(); 
             const statusDiv = document.getElementById('form-status');
-            const submitBtn = document.querySelector('.btn-submit');
-            submitBtn.innerHTML = 'Transmitting... <i class="fa-solid fa-spinner fa-spin"></i>';
+            const submitBtn = document.getElementById('btnFinalSubmit');
+            
+            submitBtn.innerHTML = 'Verifying... <i class="fa-solid fa-spinner fa-spin"></i>';
             statusDiv.style.display = 'none';
 
             const formData = {
-                projectType: document.getElementById('projectType').value,
+                projectType: document.getElementById('selectedPlan').value,
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                message: document.getElementById('message').value
+                mobile: document.getElementById('mobile').value,
+                otp: document.getElementById('otp').value,
+                message: "Selected through Pricing Modal Architecture"
             };
 
             try {
@@ -147,20 +238,34 @@
                     body: JSON.stringify(formData)
                 });
                 const result = await response.json();
+                
                 statusDiv.style.display = 'block';
                 if(response.ok) {
-                    statusDiv.style.background = 'rgba(0, 210, 255, 0.1)'; statusDiv.style.color = '#00D2FF'; statusDiv.style.border = '1px solid #00D2FF';
+                    statusDiv.style.background = 'rgba(0, 210, 255, 0.1)'; 
+                    statusDiv.style.color = '#00D2FF'; 
+                    statusDiv.style.border = '1px solid #00D2FF';
                     statusDiv.innerText = result.message;
-                    document.getElementById('pricingForm').reset();
+                    
+                    // Close modal automatically after 3 seconds on success
+                    setTimeout(closeModal, 3000);
                 } else {
-                    statusDiv.style.background = 'rgba(255, 50, 50, 0.1)'; statusDiv.style.color = '#ff5555'; statusDiv.style.border = '1px solid #ff5555';
+                    statusDiv.style.background = 'rgba(255, 50, 50, 0.1)'; 
+                    statusDiv.style.color = '#ff5555'; 
+                    statusDiv.style.border = '1px solid #ff5555';
                     statusDiv.innerText = result.message;
                 }
             } catch (error) {
-                statusDiv.style.display = 'block'; statusDiv.style.color = '#ff5555'; statusDiv.innerText = 'Network failure.';
+                statusDiv.style.display = 'block'; 
+                statusDiv.style.color = '#ff5555'; 
+                statusDiv.innerText = 'Network failure.';
             }
-            submitBtn.innerHTML = 'Initialize Contract <i class="fa-solid fa-file-signature"></i>';
+            submitBtn.innerHTML = 'Verify & Initialize Contract';
         });
+
+        // Close Modal if user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target == modal) closeModal();
+        }
     </script>
 </body>
 </html>
