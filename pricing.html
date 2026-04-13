@@ -19,16 +19,19 @@
         .page-header h1 { font-size: 3.5rem; color: var(--secondary-color); text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .page-header p { font-size: 1.2rem; color: #A0B3C6; max-width: 700px; margin: 1rem auto; }
 
-        .pricing-grid { padding: 2rem 5% 6rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
-        .price-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 3rem; border-radius: 15px; width: 100%; max-width: 350px; backdrop-filter: blur(10px); transition: 0.4s; position: relative; text-align: center; cursor: pointer; }
-        .price-card:hover { transform: translateY(-10px); border-color: var(--secondary-color); box-shadow: 0 10px 40px rgba(0, 210, 255, 0.2); }
-        .price-card h3 { font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--text-light); }
-        .price-card p { color: #A0B3C6; font-size: 0.9rem; margin-bottom: 1.5rem; }
-        .price-card ul { margin-bottom: 2rem; text-align: left; }
-        .price-card ul li { margin-bottom: 1rem; padding-left: 2rem; position: relative; color: #A0B3C6; font-size: 0.95rem; }
-        .price-card ul li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--secondary-color); position: absolute; left: 0; }
+        .pricing-grid { padding: 2rem 5% 6rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; justify-items: center; }
         
-        .btn-select { background: transparent; border: 2px solid var(--secondary-color); color: var(--secondary-color); padding: 0.8rem 2rem; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .price-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 2.5rem 2rem; border-radius: 15px; width: 100%; max-width: 400px; backdrop-filter: blur(10px); transition: 0.4s; position: relative; text-align: center; cursor: pointer; display: flex; flex-direction: column; }
+        .price-card:hover { transform: translateY(-10px); border-color: var(--secondary-color); box-shadow: 0 10px 40px rgba(0, 210, 255, 0.2); }
+        
+        .price-card i { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        .price-card h3 { font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--text-light); }
+        .promo-price { font-size: 1.4rem; color: var(--secondary-color); font-weight: bold; margin-bottom: 1rem; }
+        
+        .desc { color: #A0B3C6; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6; flex-grow: 1; }
+        .tnc { font-size: 0.75rem; color: rgba(160, 179, 198, 0.6); margin-bottom: 1.5rem; font-style: italic; }
+        
+        .btn-select { background: transparent; border: 2px solid var(--secondary-color); color: var(--secondary-color); padding: 0.8rem 2rem; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; margin-top: auto; }
         .price-card:hover .btn-select { background: var(--secondary-color); color: var(--primary-color); }
 
         /* Modal Styles */
@@ -53,6 +56,8 @@
         #form-status, #otp-status { margin-top: 1rem; text-align: center; padding: 0.8rem; display: none; border-radius: 5px; font-size: 0.9rem; }
 
         footer { background: rgba(6, 16, 30, 0.9); color: #A0B3C6; text-align: center; padding: 2rem 5%; border-top: 1px solid var(--glass-border); margin-top: auto; }
+
+        @media (max-width: 768px) { .nav-links { display: none; } .page-header h1 { font-size: 2.5rem; } }
     </style>
 </head>
 <body>
@@ -68,42 +73,92 @@
 
     <header class="page-header">
         <h1>Select Your Architecture</h1>
-        <p>Capabilities bundled to match your specific enterprise growth phase.</p>
+        <p>Promotional capabilities bundled to match your specific enterprise growth phase.</p>
     </header>
 
     <section class="pricing-grid">
-        <div class="price-card" onclick="openModal('Digital Presence Plan')">
-            <h3>Digital Presence</h3>
-            <p>Establish your foundation.</p>
-            <ul>
-                <li>Website Development</li>
-                <li>UI/UX Design</li>
-                <li>Cloud Architecture Setup</li>
-            </ul>
-            <button class="btn-select">Select Plan</button>
+        
+        <div class="price-card" onclick="openModal('Website Development')">
+            <i class="fa-solid fa-code"></i>
+            <h3>Website Development</h3>
+            <p class="promo-price">Starting at RS 4,999</p>
+            <p class="desc">High-performance web applications tailored to your brand, ensuring scalability, speed, and seamless user experiences.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
         </div>
 
-        <div class="price-card" onclick="openModal('Growth & Scale Plan')">
-            <h3>Growth & Scale</h3>
-            <p>Expand your operational reach.</p>
-            <ul>
-                <li>E-Commerce Solutions</li>
-                <li>App Development (iOS/Android)</li>
-                <li>Data-Driven Digital Marketing</li>
-            </ul>
-            <button class="btn-select">Select Plan</button>
+        <div class="price-card" onclick="openModal('App Development')">
+            <i class="fa-brands fa-app-store-ios"></i>
+            <h3>App Development</h3>
+            <p class="promo-price">Starting at RS 14,999</p>
+            <p class="desc">Native and cross-platform mobile applications engineered for both iOS and Android environments.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
         </div>
 
-        <div class="price-card" onclick="openModal('Enterprise Security Plan')">
-            <h3>Enterprise Matrix</h3>
-            <p>Secure and automate systems.</p>
-            <ul>
-                <li>Cybersecurity & Protection</li>
-                <li>AI & Data Analytics</li>
-                <li>Custom API Integration</li>
-            </ul>
-            <button class="btn-select">Select Plan</button>
+        <div class="price-card" onclick="openModal('E-Commerce Solutions')">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <h3>E-Commerce Solutions</h3>
+            <p class="promo-price">Starting at RS 9,999</p>
+            <p class="desc">End-to-end digital storefronts featuring secure gateways, robust cart architecture, and optimized conversion funnels.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
         </div>
+
+        <div class="price-card" onclick="openModal('Digital Marketing')">
+            <i class="fa-solid fa-chart-line"></i>
+            <h3>Digital Marketing</h3>
+            <p class="promo-price">Starting at RS 2,999/mo</p>
+            <p class="desc">Data-driven marketing strategies, SEO, and targeted ad campaigns designed to maximize your ROI and brand visibility.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('Cybersecurity & Protection')">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>Cybersecurity</h3>
+            <p class="promo-price">Starting at RS 7,999</p>
+            <p class="desc">Advanced security protocols, DDoS mitigation, and vulnerability assessments to keep your digital assets impenetrable.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('AI & Data Analytics')">
+            <i class="fa-solid fa-microchip"></i>
+            <h3>AI & Data Analytics</h3>
+            <p class="promo-price">Starting at RS 12,999</p>
+            <p class="desc">Intelligent machine learning integrations and complex data analysis to drive smarter, automated business decisions.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('Cloud Architecture')">
+            <i class="fa-solid fa-cloud"></i>
+            <h3>Cloud Architecture</h3>
+            <p class="promo-price">Starting at RS 3,999/mo</p>
+            <p class="desc">Secure cloud hosting, server configuration, and reliable database management to keep operations running 24/7.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('UI/UX Design')">
+            <i class="fa-solid fa-pen-nib"></i>
+            <h3>UI/UX Design</h3>
+            <p class="promo-price">Starting at RS 5,999</p>
+            <p class="desc">User-centric interfaces that are visually stunning and intuitively designed to increase engagement and retention.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
+        <div class="price-card" onclick="openModal('API Integration')">
+            <i class="fa-solid fa-link"></i>
+            <h3>API Integration</h3>
+            <p class="promo-price">Starting at RS 1,999</p>
+            <p class="desc">Seamless connection of third-party services, payment gateways, and custom endpoints to expand your system's functionality.</p>
+            <p class="tnc">* T&C Apply</p>
+            <button class="btn-select">Secure Quote</button>
+        </div>
+
     </section>
 
     <div id="quoteModal" class="modal">
@@ -148,7 +203,7 @@
     </footer>
 
     <script>
-        const modal = document. document.getElementById('quoteModal');
+        const modal = document.getElementById('quoteModal');
         
         function openModal(planName) {
             document.getElementById('selectedPlan').value = planName;
@@ -194,7 +249,6 @@
                 if (response.ok) {
                     otpStatus.style.color = '#00D2FF';
                     otpStatus.innerText = result.message;
-                    // Reveal OTP Field and Final Submit button
                     document.getElementById('otpGroup').style.display = 'block';
                     document.getElementById('btnFinalSubmit').style.display = 'block';
                     btnSendOtp.innerText = 'Sent!';
@@ -228,7 +282,7 @@
                 email: document.getElementById('email').value,
                 mobile: document.getElementById('mobile').value,
                 otp: document.getElementById('otp').value,
-                message: "Selected through Pricing Modal Architecture"
+                message: "Selected through Promotional Pricing Grid"
             };
 
             try {
@@ -246,7 +300,6 @@
                     statusDiv.style.border = '1px solid #00D2FF';
                     statusDiv.innerText = result.message;
                     
-                    // Close modal automatically after 3 seconds on success
                     setTimeout(closeModal, 3000);
                 } else {
                     statusDiv.style.background = 'rgba(255, 50, 50, 0.1)'; 
@@ -262,7 +315,6 @@
             submitBtn.innerHTML = 'Verify & Initialize Contract';
         });
 
-        // Close Modal if user clicks outside of it
         window.onclick = function(event) {
             if (event.target == modal) closeModal();
         }
