@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
+// --- Database Setup ---
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -22,10 +23,26 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+// Test connection & Auto-Create OTP Table for Multi-Process Safety
 pool.getConnection()
-    .then(conn => { console.log('Securely connected to MariaDB Database'); conn.release(); })
+    .then(async conn => {
+        console.log('Securely connected to MariaDB Database');
+        
+        // This prevents the "Worker Memory Wipe" issue on Hostinger
+        await conn.execute(`
+            CREATE TABLE IF NOT EXISTS otp_verification (
+                mobile VARCHAR(20) PRIMARY KEY,
+                otp VARCHAR(10) NOT NULL,
+                expires_at BIGINT NOT NULL
+            )
+        `);
+        console.log('Database OTP Verification table ready.');
+        
+        conn.release();
+    })
     .catch(err => console.error('Database connection error:', err.message));
 
+// --- Email Setup ---
 const transporter = nodemailer.createTransport({
     host: 'smtp.hostinger.com',
     port: 465,
@@ -33,69 +50,67 @@ const transporter = nodemailer.createTransport({
     auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
 });
 
-// --- ENHANCED SECURE OTP STORE ---
-// Now stores objects with expiry times instead of just strings
-const otpStore = {};
-
+// --- ROUTES ---
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/services', (req, res) => res.sendFile(path.join(__dirname, 'services.html')));
 app.get('/pricing', (req, res) => res.sendFile(path.join(__dirname, 'pricing.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'contact.html')));
 
-// --- ROUTE: SEND OTP VIA AUTHKEY.IO ---
-app.post('/api/send-otp', (req, res) => {
+// --- 1. SEND OTP (DATABASE BACKED) ---
+app.post('/api/send-otp', async (req, res) => {
     const { mobile, country_code } = req.body;
-    const cleanMobile = mobile.trim();
+    const cleanMobile = mobile ? mobile.trim() : '';
 
     if (!cleanMobile) {
         return res.status(400).json({ success: false, message: 'Mobile number required.' });
     }
 
-    // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    // Store OTP with a 5-MINUTE Expiry Timestamp for Security
-    otpStore[cleanMobile] = {
-        code: otp,
-        expiresAt: Date.now() + (5 * 60 * 1000) // 5 minutes from now
-    };
-    
-    console.log(`Generated OTP for ${cleanMobile}: ${otp}`);
+    const expiresAt = Date.now() + (5 * 60 * 1000); // 5 mins from now
 
-    const options = {
-        method: 'GET',
-        url: 'https://api.authkey.io/request', 
-        qs: {
-            authkey: process.env.AUTHKEY_API,
-            mobile: cleanMobile,
-            country_code: country_code || '91',
-            sid: process.env.AUTHKEY_SENDER, 
-            otp: otp,   
-            var1: otp   
-        }
-    };
+    try {
+        // Save to Database (Updates if user requested multiple times)
+        await pool.execute(
+            'INSERT INTO otp_verification (mobile, otp, expires_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE otp = ?, expires_at = ?',
+            [cleanMobile, otp, expiresAt, otp, expiresAt]
+        );
 
-    request(options, function (error, response, body) {
-        if (error) {
-            console.error('API Error:', error);
-            return res.status(500).json({ success: false, message: 'Failed to dispatch OTP.' });
-        }
-        
-        if (body && (body.includes('error') || body.includes('false'))) {
-             console.log("AUTHKEY REJECTED SMS:", body);
-             return res.status(500).json({ success: false, message: 'Provider rejected SMS.' });
-        } else {
-             res.status(200).json({ success: true, message: 'OTP Dispatched. Valid for 5 minutes.' });
-        }
-    });
+        console.log(`Saved DB OTP for ${cleanMobile}: ${otp}`);
+
+        // Send via Authkey
+        const options = {
+            method: 'GET',
+            url: 'https://api.authkey.io/request', 
+            qs: {
+                authkey: process.env.AUTHKEY_API,
+                mobile: cleanMobile,
+                country_code: country_code || '91',
+                sid: process.env.AUTHKEY_SENDER, 
+                otp: otp,   
+                var1: otp   
+            }
+        };
+
+        request(options, function (error, response, body) {
+            if (error || (body && (body.includes('error') || body.includes('false')))) {
+                 console.log("AUTHKEY FAILED:", body || error);
+                 return res.status(500).json({ success: false, message: 'Provider rejected SMS.' });
+            } else {
+                 res.status(200).json({ success: true, message: 'OTP Dispatched. Valid for 5 minutes.' });
+            }
+        });
+
+    } catch (dbError) {
+        console.error('Database Error during OTP creation:', dbError);
+        res.status(500).json({ success: false, message: 'System error generating OTP.' });
+    }
 });
 
-// --- SECURE FORM SUBMISSION API ---
+// --- 2. SECURE FORM SUBMISSION (DATABASE BACKED) ---
 app.post('/api/contact', async (req, res) => {
     try {
         const { projectType, name, email, mobile, otp, message } = req.body;
 
-        // Clean inputs to prevent invisible spaces from causing errors
         const cleanMobile = mobile ? mobile.trim() : '';
         const cleanOtp = otp ? otp.trim() : '';
 
@@ -103,24 +118,28 @@ app.post('/api/contact', async (req, res) => {
             return res.status(400).json({ success: false, message: 'All fields and OTP are required.' });
         }
 
-        // --- STRICT SECURE OTP VERIFICATION ---
-        const record = otpStore[cleanMobile];
+        // --- FETCH OTP FROM DATABASE ---
+        const [rows] = await pool.execute('SELECT * FROM otp_verification WHERE mobile = ?', [cleanMobile]);
 
-        if (!record) {
+        if (rows.length === 0) {
             return res.status(400).json({ success: false, message: 'No OTP requested for this number.' });
         }
 
-        if (Date.now() > record.expiresAt) {
-            delete otpStore[cleanMobile]; // Cleanup expired OTP
+        const record = rows[0];
+
+        // Check Expiration
+        if (Date.now() > record.expires_at) {
+            await pool.execute('DELETE FROM otp_verification WHERE mobile = ?', [cleanMobile]);
             return res.status(400).json({ success: false, message: 'OTP has expired. Request a new one.' });
         }
 
-        if (record.code !== cleanOtp) {
+        // Check Match
+        if (record.otp !== cleanOtp) {
             return res.status(400).json({ success: false, message: 'Invalid OTP. Please try again.' });
         }
 
-        // If it passes all checks, delete it so it can't be reused (Replay Attack Prevention)
-        delete otpStore[cleanMobile]; 
+        // OTP is valid! Delete it to prevent reuse.
+        await pool.execute('DELETE FROM otp_verification WHERE mobile = ?', [cleanMobile]);
 
         // Generate Reference & Insert into DB
         const timeString = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(new Date()).replace(/:/g, ''); 
