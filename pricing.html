@@ -20,44 +20,44 @@
         .page-header p { font-size: 1.2rem; color: #A0B3C6; max-width: 700px; margin: 1rem auto; }
 
         .pricing-grid { padding: 2rem 5% 6rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; justify-items: center; }
-        
         .price-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 2.5rem 2rem; border-radius: 15px; width: 100%; max-width: 400px; backdrop-filter: blur(10px); transition: 0.4s; position: relative; text-align: center; cursor: pointer; display: flex; flex-direction: column; }
         .price-card:hover { transform: translateY(-10px); border-color: var(--secondary-color); box-shadow: 0 10px 40px rgba(0, 210, 255, 0.2); }
-        
         .price-card i { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
         .price-card h3 { font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--text-light); }
         .promo-price { font-size: 1.4rem; color: var(--secondary-color); font-weight: bold; margin-bottom: 1rem; }
-        
         .desc { color: #A0B3C6; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6; flex-grow: 1; }
         .tnc { font-size: 0.75rem; color: rgba(160, 179, 198, 0.6); margin-bottom: 1.5rem; font-style: italic; }
         
         .btn-select { background: transparent; border: 2px solid var(--secondary-color); color: var(--secondary-color); padding: 0.8rem 2rem; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; margin-top: auto; }
         .price-card:hover .btn-select { background: var(--secondary-color); color: var(--primary-color); }
 
-        /* Modal Styles */
+        /* Unified Form & Modal Styles */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
-        .modal-content { background: var(--primary-color); padding: 3rem; border-radius: 15px; border: 1px solid var(--secondary-color); width: 90%; max-width: 500px; position: relative; box-shadow: 0 0 30px rgba(0, 210, 255, 0.3); animation: slideIn 0.4s ease; }
+        .modal-content { background: var(--primary-color); padding: 3rem; border-radius: 15px; border: 1px solid var(--secondary-color); width: 90%; max-width: 500px; position: relative; box-shadow: 0 0 30px rgba(0, 210, 255, 0.3); animation: slideIn 0.4s ease; max-height: 90vh; overflow-y: auto; }
         @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .close-btn { position: absolute; top: 15px; right: 20px; color: white; font-size: 2rem; cursor: pointer; transition: 0.3s; }
         .close-btn:hover { color: #ff5555; }
-        
         .modal-content h2 { text-align: center; color: var(--secondary-color); margin-bottom: 1.5rem; font-size: 1.8rem; }
+        
+        /* Standardized Input Groups for all pages */
         .input-group { margin-bottom: 1.2rem; }
         .input-group label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; color: #A0B3C6; }
-        .input-group input { width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); color: white; border-radius: 5px; outline: none; }
-        .input-group input:focus { border-color: var(--secondary-color); }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); color: white; border-radius: 5px; outline: none; font-size: 1rem; }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--secondary-color); }
+        .input-group textarea { resize: vertical; min-height: 80px; }
         
         .otp-container { display: flex; gap: 10px; }
         #btnSendOtp { background: var(--secondary-color); color: var(--primary-color); border: none; padding: 0 1.5rem; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; white-space: nowrap; }
         #btnSendOtp:hover { background: white; }
+        #btnSendOtp:disabled { background: #555; color: #aaa; cursor: not-allowed; }
+        
         .btn-submit { width: 100%; background: var(--secondary-color); color: var(--primary-color); border: none; padding: 1rem; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; margin-top: 1rem; display: none; }
         .btn-submit:hover { box-shadow: 0 0 20px rgba(0, 210, 255, 0.4); background: white; }
-        
         #form-status, #otp-status { margin-top: 1rem; text-align: center; padding: 0.8rem; display: none; border-radius: 5px; font-size: 0.9rem; }
 
         footer { background: rgba(6, 16, 30, 0.9); color: #A0B3C6; text-align: center; padding: 2rem 5%; border-top: 1px solid var(--glass-border); margin-top: auto; }
 
-        @media (max-width: 768px) { .nav-links { display: none; } .page-header h1 { font-size: 2.5rem; } }
+        @media (max-width: 768px) { .nav-links { display: none; } .page-header h1 { font-size: 2.5rem; } .modal-content{ padding: 2rem 1.5rem; } }
     </style>
 </head>
 <body>
@@ -77,104 +77,25 @@
     </header>
 
     <section class="pricing-grid">
-        
-        <div class="price-card" onclick="openModal('Website Development')">
-            <i class="fa-solid fa-code"></i>
-            <h3>Website Development</h3>
-            <p class="promo-price">Starting at RS 4,999</p>
-            <p class="desc">High-performance web applications tailored to your brand, ensuring scalability, speed, and seamless user experiences.</p>
-            <p class="tnc">* T&C Apply</p>
-            <button class="btn-select">Secure Quote</button>
-        </div>
-
-        <div class="price-card" onclick="openModal('App Development')">
-            <i class="fa-brands fa-app-store-ios"></i>
-            <h3>App Development</h3>
-            <p class="promo-price">Starting at RS 14,999</p>
-            <p class="desc">Native and cross-platform mobile applications engineered for both iOS and Android environments.</p>
-            <p class="tnc">* T&C Apply</p>
-            <button class="btn-select">Secure Quote</button>
-        </div>
-
-        <div class="price-card" onclick="openModal('E-Commerce Solutions')">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <h3>E-Commerce Solutions</h3>
-            <p class="promo-price">Starting at RS 9,999</p>
-            <p class="desc">End-to-end digital storefronts featuring secure gateways, robust cart architecture, and optimized conversion funnels.</p>
-            <p class="tnc">* T&C Apply</p>
-            <button class="btn-select">Secure Quote</button>
-        </div>
-
-        <div class="price-card" onclick="openModal('Digital Marketing')">
-            <i class="fa-solid fa-chart-line"></i>
-            <h3>Digital Marketing</h3>
-            <p class="promo-price">Starting at RS 2,999/mo</p>
-            <p class="desc">Data-driven marketing strategies, SEO, and targeted ad campaigns designed to maximize your ROI and brand visibility.</p>
-            <p class="tnc">* T&C Apply</p>
-            <button class="btn-select">Secure Quote</button>
-        </div>
-
-        <div class="price-card" onclick="openModal('Cybersecurity & Protection')">
-            <i class="fa-solid fa-shield-halved"></i>
-            <h3>Cybersecurity</h3>
-            <p class="promo-price">Starting at RS 7,999</p>
-            <p class="desc">Advanced security protocols, DDoS mitigation, and vulnerability assessments to keep your digital assets impenetrable.</p>
-            <p class="tnc">* T&C Apply</p>
-            <button class="btn-select">Secure Quote</button>
-        </div>
-
-        <div class="price-card" onclick="openModal('AI & Data Analytics')">
-            <i class="fa-solid fa-microchip"></i>
-            <h3>AI & Data Analytics</h3>
-            <p class="promo-price">Starting at RS 12,999</p>
-            <p class="desc">Intelligent machine learning integrations and complex data analysis to drive smarter, automated business decisions.</p>
-            <p class="tnc">* T&C Apply</p>
-            <button class="btn-select">Secure Quote</button>
-        </div>
-
-        <div class="price-card" onclick="openModal('Cloud Architecture')">
-            <i class="fa-solid fa-cloud"></i>
-            <h3>Cloud Architecture</h3>
-            <p class="promo-price">Starting at RS 3,999/mo</p>
-            <p class="desc">Secure cloud hosting, server configuration, and reliable database management to keep operations running 24/7.</p>
-            <p class="tnc">* T&C Apply</p>
-            <button class="btn-select">Secure Quote</button>
-        </div>
-
-        <div class="price-card" onclick="openModal('UI/UX Design')">
-            <i class="fa-solid fa-pen-nib"></i>
-            <h3>UI/UX Design</h3>
-            <p class="promo-price">Starting at RS 5,999</p>
-            <p class="desc">User-centric interfaces that are visually stunning and intuitively designed to increase engagement and retention.</p>
-            <p class="tnc">* T&C Apply</p>
-            <button class="btn-select">Secure Quote</button>
-        </div>
-
-        <div class="price-card" onclick="openModal('API Integration')">
-            <i class="fa-solid fa-link"></i>
-            <h3>API Integration</h3>
-            <p class="promo-price">Starting at RS 1,999</p>
-            <p class="desc">Seamless connection of third-party services, payment gateways, and custom endpoints to expand your system's functionality.</p>
-            <p class="tnc">* T&C Apply</p>
-            <button class="btn-select">Secure Quote</button>
-        </div>
-
+        <div class="price-card" onclick="openModal('Website Development')"><i class="fa-solid fa-code"></i><h3>Website Development</h3><p class="promo-price">Starting at RS 4,999</p><p class="desc">High-performance web applications tailored to your brand.</p><button class="btn-select">Secure Quote</button></div>
+        <div class="price-card" onclick="openModal('App Development')"><i class="fa-brands fa-app-store-ios"></i><h3>App Development</h3><p class="promo-price">Starting at RS 14,999</p><p class="desc">Native and cross-platform mobile applications.</p><button class="btn-select">Secure Quote</button></div>
+        <div class="price-card" onclick="openModal('E-Commerce Solutions')"><i class="fa-solid fa-cart-shopping"></i><h3>E-Commerce</h3><p class="promo-price">Starting at RS 9,999</p><p class="desc">End-to-end digital storefronts featuring secure gateways.</p><button class="btn-select">Secure Quote</button></div>
     </section>
 
     <div id="quoteModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle">Initialize Plan</h2>
-            <form id="pricingForm">
-                <input type="hidden" id="selectedPlan" name="selectedPlan">
+            <form id="unifiedForm">
+                <input type="hidden" id="projectType" name="projectType">
                 
                 <div class="input-group">
-                    <label>System Name / Company</label>
-                    <input type="text" id="name" required placeholder="Your Name">
+                    <label>System Name / Designation</label>
+                    <input type="text" id="name" required placeholder="Your Name or Company">
                 </div>
                 
                 <div class="input-group">
-                    <label>Encrypted Return Address</label>
+                    <label>Encrypted Return Address (Email)</label>
                     <input type="email" id="email" required placeholder="contact@domain.com">
                 </div>
 
@@ -192,83 +113,76 @@
                     <input type="text" id="otp" placeholder="Enter 6-digit OTP">
                 </div>
 
-                <button type="submit" id="btnFinalSubmit" class="btn-submit">Verify & Initialize Contract</button>
+                <div class="input-group" id="payloadGroup" style="display: none;">
+                    <label>Transmission Payload (Project Details)</label>
+                    <textarea id="message" required placeholder="Detail your required architecture..."></textarea>
+                </div>
+
+                <button type="submit" id="btnFinalSubmit" class="btn-submit">Verify & Transmit Data</button>
                 <div id="form-status"></div>
             </form>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 WebNova Technologies. All operations secured.</p>
-    </footer>
+    <footer><p>&copy; 2026 WebNova Technologies. All operations secured.</p></footer>
 
     <script>
         const modal = document.getElementById('quoteModal');
         
         function openModal(planName) {
-            document.getElementById('selectedPlan').value = planName;
+            document.getElementById('projectType').value = planName;
             document.getElementById('modalTitle').innerText = 'Initialize ' + planName;
             modal.style.display = 'flex';
         }
 
         function closeModal() {
             modal.style.display = 'none';
-            document.getElementById('pricingForm').reset();
+            document.getElementById('unifiedForm').reset();
             document.getElementById('otpGroup').style.display = 'none';
+            document.getElementById('payloadGroup').style.display = 'none';
             document.getElementById('btnFinalSubmit').style.display = 'none';
             document.getElementById('form-status').style.display = 'none';
             document.getElementById('otp-status').style.display = 'none';
+            document.getElementById('btnSendOtp').innerText = 'Get OTP';
+            document.getElementById('btnSendOtp').disabled = false;
         }
 
-        // Send OTP Logic
         document.getElementById('btnSendOtp').addEventListener('click', async () => {
             const mobile = document.getElementById('mobile').value;
             const otpStatus = document.getElementById('otp-status');
             const btnSendOtp = document.getElementById('btnSendOtp');
 
             if (!mobile || mobile.length < 10) {
-                otpStatus.style.display = 'block';
-                otpStatus.style.color = '#ff5555';
-                otpStatus.innerText = 'Please enter a valid mobile number.';
-                return;
+                otpStatus.style.display = 'block'; otpStatus.style.color = '#ff5555'; otpStatus.innerText = 'Please enter a valid mobile number.'; return;
             }
 
-            btnSendOtp.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-            btnSendOtp.disabled = true;
+            btnSendOtp.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; btnSendOtp.disabled = true;
 
             try {
                 const response = await fetch('/api/send-otp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ mobile: mobile, country_code: '91' })
                 });
-                
                 const result = await response.json();
                 otpStatus.style.display = 'block';
                 
                 if (response.ok) {
-                    otpStatus.style.color = '#00D2FF';
-                    otpStatus.innerText = result.message;
+                    otpStatus.style.color = '#00D2FF'; otpStatus.innerText = result.message;
                     document.getElementById('otpGroup').style.display = 'block';
+                    document.getElementById('payloadGroup').style.display = 'block';
                     document.getElementById('btnFinalSubmit').style.display = 'block';
                     btnSendOtp.innerText = 'Sent!';
                 } else {
-                    otpStatus.style.color = '#ff5555';
-                    otpStatus.innerText = result.message;
-                    btnSendOtp.innerText = 'Get OTP';
-                    btnSendOtp.disabled = false;
+                    otpStatus.style.color = '#ff5555'; otpStatus.innerText = result.message;
+                    btnSendOtp.innerText = 'Get OTP'; btnSendOtp.disabled = false;
                 }
             } catch (error) {
-                otpStatus.style.display = 'block';
-                otpStatus.style.color = '#ff5555';
-                otpStatus.innerText = 'Network error. Try again.';
-                btnSendOtp.innerText = 'Get OTP';
-                btnSendOtp.disabled = false;
+                otpStatus.style.display = 'block'; otpStatus.style.color = '#ff5555'; otpStatus.innerText = 'Network error.';
+                btnSendOtp.innerText = 'Get OTP'; btnSendOtp.disabled = false;
             }
         });
 
-        // Final Form Submission
-        document.getElementById('pricingForm').addEventListener('submit', async function(e) {
+        document.getElementById('unifiedForm').addEventListener('submit', async function(e) {
             e.preventDefault(); 
             const statusDiv = document.getElementById('form-status');
             const submitBtn = document.getElementById('btnFinalSubmit');
@@ -277,47 +191,36 @@
             statusDiv.style.display = 'none';
 
             const formData = {
-                projectType: document.getElementById('selectedPlan').value,
+                projectType: document.getElementById('projectType').value,
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 mobile: document.getElementById('mobile').value,
                 otp: document.getElementById('otp').value,
-                message: "Selected through Promotional Pricing Grid"
+                message: document.getElementById('message').value
             };
 
             try {
                 const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
                 });
                 const result = await response.json();
                 
                 statusDiv.style.display = 'block';
                 if(response.ok) {
-                    statusDiv.style.background = 'rgba(0, 210, 255, 0.1)'; 
-                    statusDiv.style.color = '#00D2FF'; 
-                    statusDiv.style.border = '1px solid #00D2FF';
+                    statusDiv.style.background = 'rgba(0, 210, 255, 0.1)'; statusDiv.style.color = '#00D2FF'; statusDiv.style.border = '1px solid #00D2FF';
                     statusDiv.innerText = result.message;
-                    
                     setTimeout(closeModal, 3000);
                 } else {
-                    statusDiv.style.background = 'rgba(255, 50, 50, 0.1)'; 
-                    statusDiv.style.color = '#ff5555'; 
-                    statusDiv.style.border = '1px solid #ff5555';
+                    statusDiv.style.background = 'rgba(255, 50, 50, 0.1)'; statusDiv.style.color = '#ff5555'; statusDiv.style.border = '1px solid #ff5555';
                     statusDiv.innerText = result.message;
                 }
             } catch (error) {
-                statusDiv.style.display = 'block'; 
-                statusDiv.style.color = '#ff5555'; 
-                statusDiv.innerText = 'Network failure.';
+                statusDiv.style.display = 'block'; statusDiv.style.color = '#ff5555'; statusDiv.innerText = 'Network failure.';
             }
-            submitBtn.innerHTML = 'Verify & Initialize Contract';
+            submitBtn.innerHTML = 'Verify & Transmit Data';
         });
 
-        window.onclick = function(event) {
-            if (event.target == modal) closeModal();
-        }
+        window.onclick = function(event) { if (event.target == modal) closeModal(); }
     </script>
 </body>
 </html>
