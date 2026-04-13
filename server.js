@@ -56,7 +56,6 @@ app.post('/api/send-otp', (req, res) => {
     console.log(`Target Mobile: ${mobile}, Country: ${country_code || '91'}`);
 
     if (!mobile) {
-        console.log("FAILED: No mobile number provided.");
         return res.status(400).json({ success: false, message: 'Mobile number required.' });
     }
 
@@ -65,20 +64,21 @@ app.post('/api/send-otp', (req, res) => {
     otpStore[mobile] = otp; 
     console.log(`Generated OTP: ${otp}`);
 
-    // Authkey.io integration
+    // Authkey.io integration - USING 'sid' TO MATCH YOUR SUCCESSFUL DASHBOARD LOG
     const options = {
         method: 'GET',
         url: 'https://api.authkey.io/request', 
         qs: {
             authkey: process.env.AUTHKEY_API,
-            sms: `Your WebNova secure verification code is: ${otp}`,
             mobile: mobile,
             country_code: country_code || '91',
-            sender: process.env.AUTHKEY_SENDER
+            sid: process.env.AUTHKEY_SENDER, // Uses '38323' as the Template/Sender ID
+            otp: otp,   // Injects OTP into the Authkey template
+            var1: otp   // Fallback variable in case template uses {#var1#}
         }
     };
 
-    console.log("Calling Authkey API...");
+    console.log("Calling Authkey API with SID...");
 
     request(options, function (error, response, body) {
         if (error) {
@@ -86,17 +86,15 @@ app.post('/api/send-otp', (req, res) => {
             return res.status(500).json({ success: false, message: 'Failed to dispatch OTP.' });
         }
         
-        console.log('Authkey HTTP Status Code:', response && response.statusCode);
         console.log('Authkey Raw Response:', body);
 
-        // Check if Authkey actually accepted it
-        if (body && body.includes('error')) {
+        if (body && body.includes('error') || body.includes('false')) {
              console.log("AUTHKEY REJECTED THE SMS.");
+             return res.status(500).json({ success: false, message: 'Provider rejected SMS. Check logs.' });
         } else {
              console.log("AUTHKEY ACCEPTED THE SMS.");
+             res.status(200).json({ success: true, message: 'OTP Dispatched. Check your phone.' });
         }
-
-        res.status(200).json({ success: true, message: 'OTP Dispatched. Check your phone.' });
     });
 });
 
@@ -106,15 +104,15 @@ app.post('/api/contact', async (req, res) => {
         const { projectType, name, email, mobile, otp, message } = req.body;
 
         // 1. Validation
-        if (!projectType || !name || !email || !mobile || !otp) {
-            return res.status(400).json({ success: false, message: 'All fields and OTP are required.' });
+        if (!projectType || !name || !email || !mobile || !otp || !message) {
+            return res.status(400).json({ success: false, message: 'All fields, payload, and OTP are required.' });
         }
 
         // 2. Verify OTP
         if (otpStore[mobile] !== otp) {
             return res.status(400).json({ success: false, message: 'Invalid or Expired OTP.' });
         }
-        delete otpStore[mobile]; // Clear OTP after successful use
+        delete otpStore[mobile]; 
 
         // 3. Generate Reference Number
         const istFormatter = new Intl.DateTimeFormat('en-GB', { 
@@ -123,14 +121,14 @@ app.post('/api/contact', async (req, res) => {
         const timeString = istFormatter.format(new Date()).replace(/:/g, ''); 
         const finalReference = `PLAN-${timeString}`;
 
-        // Append Mobile to the message so it fits in your existing DB schema
-        const detailedMessage = `Verified Mobile: ${mobile}\n\nClient Notes:\n${message || 'Standard Plan Selection'}`;
+        // 4. Append Mobile to message payload
+        const detailedMessage = `Verified Mobile: ${mobile}\n\nTransmission Payload:\n${message}`;
 
-        // 4. Insert into MariaDB
+        // 5. Insert into MariaDB
         const sqlQuery = 'INSERT INTO contacts (reference_number, project_type, name, email, message) VALUES (?, ?, ?, ?, ?)';
         await pool.execute(sqlQuery, [finalReference, projectType, name, email, detailedMessage]);
 
-        // 5. Admin Email
+        // 6. Admin Email
         const adminMailOptions = {
             from: `"WebNova System" <${process.env.EMAIL_USER}>`,
             to: process.env.ADMIN_EMAIL,
@@ -138,7 +136,7 @@ app.post('/api/contact', async (req, res) => {
             text: `WEBNOVA TECHNOLOGIES - NEW LEAD\n\nReference: ${finalReference}\nType: ${projectType}\nName: ${name}\nEmail: ${email}\nMobile: ${mobile} (OTP VERIFIED)\n\nPayload:\n${message}`
         };
 
-        // 6. Client Email
+        // 7. Client Email
         const clientMailOptions = {
             from: `"WebNova Technologies" <${process.env.EMAIL_USER}>`,
             to: email,
@@ -147,7 +145,7 @@ app.post('/api/contact', async (req, res) => {
                 <div style="font-family: Arial, sans-serif; color: #0A192F; padding: 20px;">
                     <h2 style="color: #00D2FF;">WebNova Technologies</h2>
                     <p>Hello <strong>${name}</strong>,</p>
-                    <p>Your request for the <strong>${projectType}</strong> has been securely logged and your mobile number has been verified.</p>
+                    <p>Your payload regarding <strong>${projectType}</strong> has been securely logged and your mobile number has been verified.</p>
                     <p>Your official tracking reference is: <strong>${finalReference}</strong></p>
                     <p>Our engineering team will initialize contact shortly.</p>
                 </div>
@@ -165,5 +163,4 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
-// Start Server
 app.listen(port, () => console.log(`WebNova Central Core active on port ${port}`));
