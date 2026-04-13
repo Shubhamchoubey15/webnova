@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services | WebNova Technologies</title>
+    <title>Services & Models | WebNova Technologies</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary-color: #0A192F; --secondary-color: #00D2FF; --text-light: #F4F4F9; --glass-bg: rgba(10, 25, 47, 0.6); --glass-border: rgba(0, 210, 255, 0.2); }
@@ -15,21 +15,52 @@
         .logo { color: var(--text-light); font-size: 1.8rem; font-weight: 700; } .logo span { color: var(--secondary-color); }
         .nav-links { display: flex; gap: 2rem; } .nav-links a { color: var(--text-light); font-weight: 500; transition: 0.3s; } .nav-links a:hover { color: var(--secondary-color); }
 
-        .page-header { padding: 10rem 5% 4rem; text-align: center; }
+        .page-header { padding: 8rem 5% 4rem; text-align: center; }
         .page-header h1 { font-size: 3.5rem; color: var(--secondary-color); text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .page-header p { font-size: 1.2rem; color: #A0B3C6; max-width: 700px; margin: 1rem auto; }
 
-        .quick-form-section { background: rgba(0,0,0,0.3); padding: 5rem 5%; border-top: 1px solid var(--glass-border); }
-        .form-wrapper { max-width: 600px; margin: 0 auto; background: var(--glass-bg); padding: 3rem; border-radius: 15px; border: 1px solid var(--glass-border); }
-        .form-wrapper h2 { text-align: center; color: var(--secondary-color); margin-bottom: 2rem; }
+        /* Engineering Capabilities (Top Row) */
+        .detailed-services { padding: 2rem 5% 4rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; }
+        .detail-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 3rem 2rem; border-radius: 15px; backdrop-filter: blur(10px); transition: 0.4s; }
+        .detail-card:hover { transform: translateY(-5px); border-color: var(--secondary-color); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .detail-card i { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1.5rem; }
+        .detail-card h3 { font-size: 1.8rem; margin-bottom: 1rem; }
+        .detail-card p { color: #A0B3C6; margin-bottom: 1.5rem; line-height: 1.7; }
+        .detail-card ul { padding-left: 1.5rem; color: var(--text-light); }
+        .detail-card ul li { margin-bottom: 0.8rem; list-style-type: square; }
 
-        /* Standardized Input Groups for all pages */
+        /* Flexible Engagement Models (Bottom Row) */
+        .models-section { padding: 4rem 5% 6rem; border-top: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); }
+        .section-title { text-align: center; font-size: 2.8rem; margin-bottom: 4rem; color: var(--text-light); }
+        .section-title span { color: var(--secondary-color); }
+        
+        .models-container { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
+        .model-card { background: var(--glass-bg); padding: 3.5rem 2.5rem; border-radius: 15px; flex: 1; min-width: 320px; max-width: 400px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px); transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; display: flex; flex-direction: column; }
+        .model-card:hover { transform: translateY(-10px); border-color: var(--secondary-color); box-shadow: 0 10px 40px rgba(0, 210, 255, 0.2); }
+        .model-card.featured { border: 2px solid var(--secondary-color); position: relative; background: rgba(17, 43, 78, 0.6); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .model-badge { background: var(--secondary-color); color: var(--primary-color); padding: 0.5rem 1.5rem; position: absolute; top: -18px; right: 50%; transform: translateX(50%); border-radius: 20px; font-weight: bold; font-size: 0.9rem; white-space: nowrap; box-shadow: 0 4px 15px rgba(0, 210, 255, 0.4); }
+        .model-card h3 { font-size: 2.2rem; color: var(--secondary-color); margin-bottom: 1rem; text-align: center; }
+        .model-card > p { text-align: center; color: #A0B3C6; margin-bottom: 2rem; flex-grow: 1; }
+        .model-card ul { text-align: left; margin-bottom: 2.5rem; }
+        .model-card ul li { margin-bottom: 1.2rem; padding-left: 2rem; position: relative; color: var(--text-light); }
+        .model-card ul li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--secondary-color); position: absolute; left: 0; top: 2px; }
+        
+        .btn-select { background: transparent; border: 2px solid var(--secondary-color); color: var(--secondary-color); padding: 0.8rem 2rem; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; margin-top: auto; }
+        .model-card:hover .btn-select { background: var(--secondary-color); color: var(--primary-color); }
+
+        /* Unified Secure Modal Styles */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
+        .modal-content { background: var(--primary-color); padding: 3rem; border-radius: 15px; border: 1px solid var(--secondary-color); width: 90%; max-width: 500px; position: relative; box-shadow: 0 0 30px rgba(0, 210, 255, 0.3); animation: slideIn 0.4s ease; max-height: 90vh; overflow-y: auto; }
+        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .close-btn { position: absolute; top: 15px; right: 20px; color: white; font-size: 2rem; cursor: pointer; transition: 0.3s; }
+        .close-btn:hover { color: #ff5555; }
+        .modal-content h2 { text-align: center; color: var(--secondary-color); margin-bottom: 1.5rem; font-size: 1.8rem; }
+        
         .input-group { margin-bottom: 1.2rem; }
         .input-group label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; color: #A0B3C6; }
-        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); color: white; border-radius: 5px; outline: none; font-size: 1rem; }
-        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--secondary-color); }
-        .input-group select option { background: var(--primary-color); }
-        .input-group textarea { resize: vertical; min-height: 120px; }
+        .input-group input, .input-group textarea { width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); color: white; border-radius: 5px; outline: none; font-size: 1rem; }
+        .input-group input:focus, .input-group textarea:focus { border-color: var(--secondary-color); }
+        .input-group textarea { resize: vertical; min-height: 80px; }
         
         .otp-container { display: flex; gap: 10px; }
         #btnSendOtp { background: var(--secondary-color); color: var(--primary-color); border: none; padding: 0 1.5rem; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; white-space: nowrap; }
@@ -41,7 +72,8 @@
         #form-status, #otp-status { margin-top: 1rem; text-align: center; padding: 0.8rem; display: none; border-radius: 5px; font-size: 0.9rem; }
 
         footer { background: rgba(6, 16, 30, 0.9); color: #A0B3C6; text-align: center; padding: 2rem 5%; border-top: 1px solid var(--glass-border); margin-top: auto; }
-        @media (max-width: 768px) { .nav-links { display: none; } .page-header h1 { font-size: 2.5rem; } .form-wrapper { padding: 2rem 1.5rem; } }
+
+        @media (max-width: 768px) { .nav-links { display: none; } .page-header h1 { font-size: 2.5rem; } .models-container { flex-direction: column; align-items: center; } .modal-content{ padding: 2rem 1.5rem; } }
     </style>
 </head>
 <body>
@@ -60,18 +92,89 @@
         <p>In-depth technical capabilities designed for high-scale enterprise operations.</p>
     </header>
 
-    <section class="quick-form-section">
-        <div class="form-wrapper">
-            <h2>Initialize a Project</h2>
+    <section class="detailed-services">
+        <div class="detail-card">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>Cybersecurity Frameworks</h3>
+            <p>We deploy military-grade encryption and network analysis to protect your digital assets from external threats.</p>
+            <ul>
+                <li>Advanced DDoS attack detection</li>
+                <li>Real-time packet inspection</li>
+                <li>Vulnerability & penetration testing</li>
+            </ul>
+        </div>
+        <div class="detail-card">
+            <i class="fa-brands fa-android"></i>
+            <h3>Application Architecture</h3>
+            <p>From mobile environments to complex web portals, we engineer seamless cross-platform software.</p>
+            <ul>
+                <li>Native Android & iOS deployment</li>
+                <li>Firebase & real-time database integration</li>
+                <li>TWA (Trusted Web Activity) setups</li>
+            </ul>
+        </div>
+        <div class="detail-card">
+            <i class="fa-solid fa-microchip"></i>
+            <h3>AI & Data Simulation</h3>
+            <p>Implement complex mathematical environments, behavioral tracking, and machine learning models directly into your business.</p>
+            <ul>
+                <li>3D/4D visual simulations</li>
+                <li>Live camera feed analytics</li>
+                <li>Predictive data modeling</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="models-section" id="engagement-models">
+        <h2 class="section-title">Flexible <span>Engagement Models</span></h2>
+        
+        <div class="models-container">
+            <div class="model-card" onclick="openModal('One-Time Build')">
+                <h3>One-Time Build</h3>
+                <p>Perfect for businesses with clear project scopes. Build it once, deploy it, and own it entirely.</p>
+                <ul>
+                    <li>Fixed-cost project delivery</li>
+                    <li>Defined timeline and milestones</li>
+                    <li>Complete source code handover</li>
+                    <li>Standard 30-day post-launch QA support</li>
+                </ul>
+                <button class="btn-select">Select Model</button>
+            </div>
+
+            <div class="model-card featured" onclick="openModal('Annual Retainer')">
+                <div class="model-badge">Most Popular Partnership</div>
+                <h3>Annual Retainer</h3>
+                <p>A continuous partnership for businesses that require ongoing development, security, and dedicated technical growth.</p>
+                <ul>
+                    <li>Dedicated development hours every month</li>
+                    <li>Continuous system updates and feature scaling</li>
+                    <li>Priority bug fixes and proactive security patches</li>
+                    <li>Ongoing digital marketing and SEO management</li>
+                    <li>Cloud hosting and server maintenance included</li>
+                </ul>
+                <button class="btn-select">Select Model</button>
+            </div>
+
+            <div class="model-card" onclick="openModal('Custom Requirements')">
+                <h3>Custom Requirements</h3>
+                <p>Tailored technical architecture for unique enterprise challenges that demand highly specialized engineering.</p>
+                <ul>
+                    <li>Fully customized project scoping</li>
+                    <li>Flexible resource and sprint allocation</li>
+                    <li>Specialized API & Security integrations</li>
+                    <li>On-demand technical consulting</li>
+                </ul>
+                <button class="btn-select">Select Model</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="quoteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Initialize Plan</h2>
             <form id="unifiedForm">
-                <div class="input-group">
-                    <label>Engagement Model</label>
-                    <select id="projectType" required>
-                        <option value="" disabled selected>Select an option...</option>
-                        <option value="One-Time Build">One-Time Build</option>
-                        <option value="Annual Retainer">Annual Retainer</option>
-                    </select>
-                </div>
+                <input type="hidden" id="projectType" name="projectType">
                 
                 <div class="input-group">
                     <label>System Name / Designation</label>
@@ -102,25 +205,51 @@
                     <textarea id="message" required placeholder="Detail your required architecture..."></textarea>
                 </div>
 
-                <button type="submit" id="btnFinalSubmit" class="btn-submit">Verify & Transmit Data <i class="fa-solid fa-paper-plane"></i></button>
+                <button type="submit" id="btnFinalSubmit" class="btn-submit">Verify & Transmit Data</button>
                 <div id="form-status"></div>
             </form>
         </div>
-    </section>
+    </div>
 
     <footer><p>&copy; 2026 WebNova Technologies. All operations secured.</p></footer>
 
     <script>
+        const modal = document.getElementById('quoteModal');
+        
+        function openModal(planName) {
+            document.getElementById('projectType').value = planName;
+            document.getElementById('modalTitle').innerText = 'Initialize ' + planName;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.getElementById('unifiedForm').reset();
+            document.getElementById('otpGroup').style.display = 'none';
+            document.getElementById('payloadGroup').style.display = 'none';
+            document.getElementById('btnFinalSubmit').style.display = 'none';
+            document.getElementById('form-status').style.display = 'none';
+            document.getElementById('otp-status').style.display = 'none';
+            document.getElementById('btnSendOtp').innerText = 'Get OTP';
+            document.getElementById('btnSendOtp').disabled = false;
+        }
+
+        // --- SECURE OTP REQUEST LOGIC WITH 30-SECOND DOWNTIME ---
         document.getElementById('btnSendOtp').addEventListener('click', async () => {
-            const mobile = document.getElementById('mobile').value;
+            const mobile = document.getElementById('mobile').value.trim();
             const otpStatus = document.getElementById('otp-status');
             const btnSendOtp = document.getElementById('btnSendOtp');
 
             if (!mobile || mobile.length < 10) {
-                otpStatus.style.display = 'block'; otpStatus.style.color = '#ff5555'; otpStatus.innerText = 'Please enter a valid mobile number.'; return;
+                otpStatus.style.display = 'block'; 
+                otpStatus.style.color = '#ff5555'; 
+                otpStatus.innerText = 'Please enter a valid 10-digit mobile number.'; 
+                return;
             }
 
-            btnSendOtp.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; btnSendOtp.disabled = true;
+            btnSendOtp.disabled = true;
+            btnSendOtp.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; 
+            otpStatus.style.display = 'none';
 
             try {
                 const response = await fetch('/api/send-otp', {
@@ -131,21 +260,41 @@
                 otpStatus.style.display = 'block';
                 
                 if (response.ok) {
-                    otpStatus.style.color = '#00D2FF'; otpStatus.innerText = result.message;
+                    otpStatus.style.color = '#00D2FF'; 
+                    otpStatus.innerText = result.message;
                     document.getElementById('otpGroup').style.display = 'block';
                     document.getElementById('payloadGroup').style.display = 'block';
                     document.getElementById('btnFinalSubmit').style.display = 'block';
-                    btnSendOtp.innerText = 'Sent!';
+                    
+                    // 30-Second Downtime Timer
+                    let timeLeft = 30;
+                    const timerId = setInterval(() => {
+                        if (timeLeft <= 0) {
+                            clearInterval(timerId);
+                            btnSendOtp.innerText = 'Resend OTP';
+                            btnSendOtp.disabled = false;
+                        } else {
+                            btnSendOtp.innerText = `Wait ${timeLeft}s`;
+                            timeLeft--;
+                        }
+                    }, 1000);
+
                 } else {
-                    otpStatus.style.color = '#ff5555'; otpStatus.innerText = result.message;
-                    btnSendOtp.innerText = 'Get OTP'; btnSendOtp.disabled = false;
+                    otpStatus.style.color = '#ff5555'; 
+                    otpStatus.innerText = result.message;
+                    btnSendOtp.innerText = 'Get OTP'; 
+                    btnSendOtp.disabled = false;
                 }
             } catch (error) {
-                otpStatus.style.display = 'block'; otpStatus.style.color = '#ff5555'; otpStatus.innerText = 'Network error.';
-                btnSendOtp.innerText = 'Get OTP'; btnSendOtp.disabled = false;
+                otpStatus.style.display = 'block'; 
+                otpStatus.style.color = '#ff5555'; 
+                otpStatus.innerText = 'Network error. Could not reach server.';
+                btnSendOtp.innerText = 'Get OTP'; 
+                btnSendOtp.disabled = false;
             }
         });
 
+        // --- FINAL SECURE SUBMISSION LOGIC ---
         document.getElementById('unifiedForm').addEventListener('submit', async function(e) {
             e.preventDefault(); 
             const statusDiv = document.getElementById('form-status');
@@ -173,7 +322,7 @@
                 if(response.ok) {
                     statusDiv.style.background = 'rgba(0, 210, 255, 0.1)'; statusDiv.style.color = '#00D2FF'; statusDiv.style.border = '1px solid #00D2FF';
                     statusDiv.innerText = result.message;
-                    document.getElementById('unifiedForm').reset();
+                    setTimeout(closeModal, 3000);
                 } else {
                     statusDiv.style.background = 'rgba(255, 50, 50, 0.1)'; statusDiv.style.color = '#ff5555'; statusDiv.style.border = '1px solid #ff5555';
                     statusDiv.innerText = result.message;
@@ -181,8 +330,10 @@
             } catch (error) {
                 statusDiv.style.display = 'block'; statusDiv.style.color = '#ff5555'; statusDiv.innerText = 'Network failure.';
             }
-            submitBtn.innerHTML = 'Verify & Transmit Data <i class="fa-solid fa-paper-plane"></i>';
+            submitBtn.innerHTML = 'Verify & Transmit Data';
         });
+
+        window.onclick = function(event) { if (event.target == modal) closeModal(); }
     </script>
 </body>
 </html>
